@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/BK_MultiDisplicine_Git.iml" filepath="$PROJECT_DIR$/BK_MultiDisplicine_Git.iml" />
+      <module fileurl="file://$PROJECT_DIR$/BK_IOT_MultiDisplicine.iml" filepath="$PROJECT_DIR$/BK_IOT_MultiDisplicine.iml" />
+      <module fileurl="file://C:\LaptopD\IOTProjects\BK_IOT_MultiDisplicine\BK_MultiDisplicine_Git.iml" filepath="C:\LaptopD\IOTProjects\BK_IOT_MultiDisplicine\BK_MultiDisplicine_Git.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://C:\LaptopD\IOTProjects\BK_IOT_MultiDisplicine\app\app.iml" filepath="C:\LaptopD\IOTProjects\BK_IOT_MultiDisplicine\app\app.iml" />
     </modules>
   </component>
 </project>
