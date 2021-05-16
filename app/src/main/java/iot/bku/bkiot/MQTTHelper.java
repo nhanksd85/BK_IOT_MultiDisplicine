@@ -27,11 +27,11 @@ public class MQTTHelper {
 
 
     private String clientId = "";
-    final String subscriptionTopic = "Phantom0610/feeds/iot-led-test"; // final String subscriptionTopic = "NPNLab_BBC/f/+";
+    final String subscriptionTopic = "NPNLab_BBC/f/+";
 
 
-    final String username = "Phantom0610"; // final String username = "NPNLab_BBC";
-    final String password = "aio_VGPx02xlqvpShPLb9jMwIaCZpXfe"; // final String password = "aio_uGgA75WHzFBjnu72A2CQ7bUnBcpm";
+    final String username = "NPNLab_BBC";
+    final String password = "aio_uGgA75WHzFBjnu72A2CQ7bUnBcpm";
 
     public MqttAndroidClient mqttAndroidClient;
 
