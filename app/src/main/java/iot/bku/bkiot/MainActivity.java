@@ -52,7 +52,11 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
 
         Log.d("ABC","Publish :" + msg);
         try {
+<<<<<<< HEAD
             mqttHelper.mqttAndroidClient.publish("NPNLab_BBC/f/+", msg);
+=======
+            mqttHelper.mqttAndroidClient.publish("Phantom0610/feeds/iot-led-test", msg); // mqttHelper.mqttAndroidClient.publish("NPNLab_BBC/f/+", msg);
+>>>>>>> a616e321e251fffa87a938b43b6b20a109256cec
         } catch (MqttException e){
 
         }
