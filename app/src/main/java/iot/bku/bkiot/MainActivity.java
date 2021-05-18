@@ -25,16 +25,27 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.List;
 import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity implements SerialInputOutputManager.Listener {
 
+    public class Constants {
+        public static final int NUM_TEXTVIEWS = 17;
+    }
+
     MQTTHelper mqttHelper;
     final String TAG = "TEST_IOT";
+    private String buffer = "";
+    TextView[] textViews = new TextView[Constants.NUM_TEXTVIEWS];
 
     JSONObject jsonObjectSend = new JSONObject();
+    JSONArray jsonArray;
 
     private static final String ACTION_USB_PERMISSION = "com.android.recipes.USB_PERMISSION";
     private static final String INTENT_ACTION_GRANT_USB = BuildConfig.APPLICATION_ID + ".GRANT_USB";
@@ -52,11 +63,7 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
 
         Log.d("ABC","Publish :" + msg);
         try {
-<<<<<<< HEAD
             mqttHelper.mqttAndroidClient.publish("NPNLab_BBC/f/+", msg);
-=======
-            mqttHelper.mqttAndroidClient.publish("Phantom0610/feeds/iot-led-test", msg); // mqttHelper.mqttAndroidClient.publish("NPNLab_BBC/f/+", msg);
->>>>>>> a616e321e251fffa87a938b43b6b20a109256cec
         } catch (MqttException e){
 
         }
@@ -67,6 +74,27 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        for (int i = 0; i < Constants.NUM_TEXTVIEWS; i++) {
+            String buttonID = "inout" + i;
+            int resID = getResources().getIdentifier(buttonID, "id", getPackageName());
+            textViews[i] = findViewById(resID);
+        }
+
+        String string = "nothing";
+        InputStream inputStream = getResources().openRawResource(R.raw.info);
+        try {
+            byte[] buffer = new byte[inputStream.available()];
+            while (inputStream.read(buffer) != -1) {
+                string = new String(buffer);
+            }
+        } catch (IOException e) {
+            Log.d("exception", e.toString());
+        }
+        try {
+            jsonArray = new JSONArray(string);
+        } catch (JSONException e) {
+            Log.d("jsonarray", "can not convert");
+        }
         openUART();
         startMQTT();
     }
@@ -76,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
         mqttHelper.setCallback(new MqttCallbackExtended() {
             @Override
             public void connectComplete(boolean b, String s) {
-                Log.d(TAG, "Init succesfull");
+                Log.d(TAG, "Init successful");
             }
 
             @Override
@@ -88,12 +116,65 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
             public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
                 Log.d(TAG, "Message arrived");
                 String dataToGateway = "";
-
                 try {
                     JSONObject jsonObjectReceive = new JSONObject(mqttMessage.toString());
                     String ID = jsonObjectReceive.getString("ID");
-                    String data = jsonObjectReceive.getString("Data");
-                    dataToGateway = "!" + ID + ":" + data + "#";
+                    String value = jsonObjectReceive.getString("Value");
+                    int idInt = Integer.parseInt(ID);
+                    switch (idInt) {
+                        case 1:
+                            textViews[10].setText(value);
+                            break;
+                        case 2:
+                            textViews[11].setText(value);
+                            break;
+                        case 3:
+                            textViews[12].setText(value);
+                            break;
+                        case 4:
+                            textViews[0].setText(value);
+                            break;
+                        case 5:
+                            textViews[1].setText(value);
+                            break;
+                        case 6:
+                            textViews[13].setText(value);
+                            break;
+                        case 7:
+                            textViews[2].setText(value);
+                            break;
+                        case 8:
+                            textViews[3].setText(value);
+                            break;
+                        case 9:
+                            textViews[4].setText(value);
+                            break;
+                        case 10:
+                            textViews[14].setText(value);
+                            break;
+                        case 11:
+                            textViews[15].setText(value);
+                            break;
+                        case 12:
+                            textViews[5].setText(value);
+                            break;
+                        case 13:
+                            textViews[6].setText(value);
+                            break;
+                        case 16:
+                            textViews[7].setText(value);
+                            break;
+                        case 17:
+                            textViews[8].setText(value);
+                            break;
+                        case 22:
+                            textViews[9].setText(value);
+                            break;
+                        case 23:
+                            textViews[16].setText(value);
+                            break;
+                    }
+                    dataToGateway = "!" + ID + ":" + value + "#";
                 } catch (JSONException e) {
                     Log.e("JSONException", "Error: " + e.toString());
                 }
@@ -153,7 +234,6 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
 
     }
 
-    private String buffer = "";
     @Override
     public void onNewData(byte[] data) {
         buffer += new String(data);
@@ -165,8 +245,15 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
                 if (index_soc < index_eoc) {
                     String sentData = buffer.substring(index_soc + 1, index_eoc);
                     int colonIndex = sentData.indexOf(":");
-                    jsonObjectSend.put("ID", sentData.substring(0, colonIndex));
-                    jsonObjectSend.put("Data", sentData.substring(colonIndex + 1, sentData.length()));
+                    String ID = sentData.substring(0, colonIndex);
+                    String Value = sentData.substring(colonIndex + 1, sentData.length());
+                    JSONObject jsonObjectData = jsonArray.getJSONObject(Integer.parseInt(ID) - 1);
+                    String name = jsonObjectData.getString("name");
+                    String unit = jsonObjectData.getString("unit");
+                    jsonObjectSend.put("ID", ID);
+                    jsonObjectSend.put("Name", name);
+                    jsonObjectSend.put("Value", Value);
+                    jsonObjectSend.put("Unit", unit);
                     sendDataMQTT(jsonObjectSend.toString());
                     buffer = "";
                 }
