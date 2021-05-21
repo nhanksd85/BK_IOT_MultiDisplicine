@@ -26,6 +26,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,15 +42,17 @@ import java.util.concurrent.Executors;
 public class MainActivity extends AppCompatActivity implements SerialInputOutputManager.Listener, View.OnClickListener {
 
     public class Constants {
-        public static final int NUM_TEXTVIEWS = 17;
+        public static final int NUM_INOUTS = 17;
+        public static final int NUM_DEVICES = 23;
     }
 
     MQTTHelper mqttHelper;
     final String TAG = "TEST_IOT";
     private String buffer = "";
-    TextView[] textViews = new TextView[Constants.NUM_TEXTVIEWS];
+    TextView[] textViews = new TextView[Constants.NUM_INOUTS];
     TextView temp, humid;
     Button buttonExit;
+    int scanFirstID;
 
     JSONObject jsonObjectSend = new JSONObject();
     JSONArray jsonArray;
@@ -55,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
 
     UsbSerialPort port;
 
-    private void sendDataMQTT(String data){
+    private void sendDataMQTT(String data, String ID){
         MqttMessage msg = new MqttMessage();
         msg.setId(1234);
         msg.setQos(0);
@@ -66,7 +73,59 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
 
         Log.d("ABC","Publish :" + msg);
         try {
-            mqttHelper.mqttAndroidClient.publish("NPNLab_BBC/f/+", msg);
+            switch (ID) {
+                case "1":
+                    mqttHelper.mqttAndroidClient.publish("CSE_BBC/feeds/bk-iot-led", msg);
+                    break;
+                case "2":
+                    mqttHelper.mqttAndroidClient.publish("CSE_BBC/feeds/bk-iot-speaker", msg);
+                    break;
+                case "3":
+                    mqttHelper.mqttAndroidClient.publish("CSE_BBC/feeds/bk-iot-lcd", msg);
+                    break;
+                case "4":
+                    mqttHelper.mqttAndroidClient.publish("CSE_BBC/feeds/bk-iot-button", msg);
+                    break;
+                case "5":
+                    mqttHelper.mqttAndroidClient.publish("CSE_BBC/feeds/bk-iot-touch", msg);
+                    break;
+                case "6":
+                    mqttHelper.mqttAndroidClient.publish("CSE_BBC/feeds/bk-iot-traffic", msg);
+                    break;
+                case "7":
+                    mqttHelper.mqttAndroidClient.publish("CSE_BBC/feeds/bk-iot-temp-humid", msg);
+                    break;
+                case "8":
+                    mqttHelper.mqttAndroidClient.publish("CSE_BBC/feeds/bk-iot-magnetic", msg);
+                    break;
+                case "9":
+                    mqttHelper.mqttAndroidClient.publish("CSE_BBC/feeds/bk-iot-soil", msg);
+                    break;
+                case "10":
+                    mqttHelper.mqttAndroidClient.publish("CSE_BBC/feeds/bk-iot-drv", msg);
+                    break;
+                case "11":
+                    mqttHelper.mqttAndroidClient1.publish("CSE_BBC1/feeds/bk-iot-relay", msg);
+                    break;
+                case "12":
+                    mqttHelper.mqttAndroidClient1.publish("CSE_BBC1/feeds/bk-iot-sound", msg);
+                    break;
+                case "13":
+                    mqttHelper.mqttAndroidClient1.publish("CSE_BBC1/feeds/bk-iot-light", msg);
+                    break;
+                case "16":
+                    mqttHelper.mqttAndroidClient1.publish("CSE_BBC1/feeds/bk-iot-infrared", msg);
+                    break;
+                case "17":
+                    mqttHelper.mqttAndroidClient1.publish("CSE_BBC1/feeds/bk-iot-servo", msg);
+                    break;
+                case "22":
+                    mqttHelper.mqttAndroidClient1.publish("CSE_BBC1/feeds/bk-iot-time", msg);
+                    break;
+                case "23":
+                    mqttHelper.mqttAndroidClient.publish("CSE_BBC1/feeds/bk-iot-gas", msg);
+                    break;
+            }
         } catch (MqttException e){
 
         }
@@ -77,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        for (int i = 0; i < Constants.NUM_TEXTVIEWS; i++) {
+        for (int i = 0; i < Constants.NUM_INOUTS; i++) {
             String buttonID = "inout" + i;
             int resID = getResources().getIdentifier(buttonID, "id", getPackageName());
             textViews[i] = findViewById(resID);
@@ -85,8 +144,6 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
 
         temp = findViewById(R.id.txtTemp);
         humid = findViewById(R.id.txtHumi);
-        buttonExit = findViewById(R.id.btnExit);
-        buttonExit.setOnClickListener(this);
 
         String string = "nothing";
         InputStream inputStream = getResources().openRawResource(R.raw.info);
@@ -103,8 +160,26 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
         } catch (JSONException e) {
             Log.d("jsonarray", "can not convert");
         }
+        try {
+            for (scanFirstID = 1; scanFirstID < Constants.NUM_DEVICES + 1; scanFirstID++) {
+                JSONObject jsonObjectInit = jsonArray.getJSONObject(scanFirstID - 1);
+                String apiURL = jsonObjectInit.getString("lastURL");
+                boolean none = (apiURL.equals("none"));
+                if (!apiURL.equals("none")) {
+                    Log.d("apiURL", apiURL);
+                    Log.d("length", Integer.toString(apiURL.length()));
+                    Log.d("none true?", Boolean.toString(none));
+                    receiveLastDataFromServer(scanFirstID, apiURL);
+                }
+            }
+        } catch (JSONException e) {
+
+        }
+
         openUART();
         startMQTT();
+        buttonExit = findViewById(R.id.btnExit);
+        buttonExit.setOnClickListener(this);
     }
 
     private void startMQTT(){
@@ -123,71 +198,13 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
             @Override
             public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
                 Log.d(TAG, "Message arrived");
+                Log.d(TAG, mqttMessage.toString());
                 String dataToGateway = "";
                 try {
                     JSONObject jsonObjectReceive = new JSONObject(mqttMessage.toString());
                     String ID = jsonObjectReceive.getString("ID");
                     String value = jsonObjectReceive.getString("Value");
-                    int idInt = Integer.parseInt(ID);
-                    switch (idInt) {
-                        case 1:
-                            textViews[10].setText(value);
-                            break;
-                        case 2:
-                            textViews[11].setText(value);
-                            break;
-                        case 3:
-                            textViews[12].setText(value);
-                            break;
-                        case 4:
-                            textViews[0].setText(value);
-                            break;
-                        case 5:
-                            textViews[1].setText(value);
-                            break;
-                        case 6:
-                            textViews[13].setText(value);
-                            break;
-                        case 7:
-                            textViews[2].setText(value);
-                            try {
-                                temp.setText(value.substring(0, value.indexOf('-')) + "\u2103");
-                                humid.setText(value.substring(value.indexOf('-') + 1, value.length()) + "\u0025");
-                            } catch (Exception e) {
-
-                            }
-                            break;
-                        case 8:
-                            textViews[3].setText(value);
-                            break;
-                        case 9:
-                            textViews[4].setText(value);
-                            break;
-                        case 10:
-                            textViews[14].setText(value);
-                            break;
-                        case 11:
-                            textViews[15].setText(value);
-                            break;
-                        case 12:
-                            textViews[5].setText(value);
-                            break;
-                        case 13:
-                            textViews[6].setText(value);
-                            break;
-                        case 16:
-                            textViews[7].setText(value);
-                            break;
-                        case 17:
-                            textViews[8].setText(value);
-                            break;
-                        case 22:
-                            textViews[9].setText(value);
-                            break;
-                        case 23:
-                            textViews[16].setText(value);
-                            break;
-                    }
+                    updateTextView(ID, value);
                     dataToGateway = "!" + ID + ":" + value + "#";
                 } catch (JSONException e) {
                     Log.e("JSONException", "Error: " + e.toString());
@@ -276,11 +293,11 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
                     jsonObjectSend.put("Name", name);
                     jsonObjectSend.put("Value", Value);
                     jsonObjectSend.put("Unit", unit);
-                    sendDataMQTT(jsonObjectSend.toString());
+                    sendDataMQTT(jsonObjectSend.toString(), ID);
                     buffer = "";
                 }
             } catch (Exception e) {
-                sendDataMQTT("Fault");
+                sendDataMQTT("Fault", "0");
                 buffer = "";
             }
         }
@@ -288,6 +305,121 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
 
     @Override
     public void onRunError(Exception e) {
+
+    }
+
+    private void receiveLastDataFromServer(final int ID, String apiURL){
+        OkHttpClient okHttpClient = new OkHttpClient();
+        Request.Builder builder = new Request.Builder();
+        Request request = builder.url(apiURL).build();
+        try {
+            okHttpClient.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Request request, IOException e) {
+                }
+                @Override
+                public void onResponse(Response response) throws IOException {
+                    String initDataReceived = response.body().string();
+                    try {
+                        JSONObject jsonObjectInitReceive = new JSONObject(initDataReceived);
+                        String receive = jsonObjectInitReceive.getString("value");
+                        JSONObject jsonObjectInitValue = new JSONObject(receive);
+                        String value = jsonObjectInitValue.getString("Value");
+                        String id = Integer.toString(ID);
+                        Log.d("id", id);
+                        updateTextView(id, value);
+                    } catch (JSONException e) {
+                        Log.e("JSONException", "Error: " + e.toString());
+                    }
+                }
+            });
+        } catch (Exception e) {
+            Log.d("Fail", "Get json");
+        }
+    }
+
+    private void updateTextView(String ID, final String value) {
+        final int idInt = Integer.parseInt(ID);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                switch (idInt) {
+                    case 1:
+                        Log.d("1", value);
+                        textViews[9].setText(value);
+                        break;
+                    case 2:
+                        Log.d("2", value);
+                        textViews[10].setText(value);
+                        break;
+                    case 3:
+                        Log.d("3", value);
+                        textViews[11].setText(value);
+                        break;
+                    case 4:
+                        Log.d("4", value);
+                        textViews[0].setText(value);
+                        break;
+                    case 5:
+                        Log.d("5", value);
+                        textViews[1].setText(value);
+                        break;
+                    case 6:
+                        Log.d("6", value);
+                        textViews[12].setText(value);
+                        break;
+                    case 7:
+                        Log.d("7", value);
+                        try {
+                            temp.setText(value.substring(0, value.indexOf('-')) + "\u2103");
+                            humid.setText(value.substring(value.indexOf('-') + 1, value.length()) + "\u0025");
+                        } catch (Exception e) {
+
+                        }
+                        break;
+                    case 8:
+                        Log.d("8", value);
+                        textViews[2].setText(value);
+                        break;
+                    case 9:
+                        Log.d("9", value);
+                        textViews[3].setText(value);
+                        break;
+                    case 10:
+                        Log.d("10", value);
+                        textViews[13].setText(value);
+                        break;
+                    case 11:
+                        Log.d("11", value);
+                        textViews[14].setText(value);
+                        break;
+                    case 12:
+                        Log.d("12", value);
+                        textViews[4].setText(value);
+                        break;
+                    case 13:
+                        Log.d("13", value);
+                        textViews[5].setText(value);
+                        break;
+                    case 16:
+                        Log.d("16", value);
+                        textViews[6].setText(value);
+                        break;
+                    case 17:
+                        Log.d("17", value);
+                        textViews[15].setText(value);
+                        break;
+                    case 22:
+                        Log.d("22", value);
+                        textViews[7].setText(value);
+                        break;
+                    case 23:
+                        Log.d("23", value);
+                        textViews[8].setText(value);
+                        break;
+                }
+            }
+        });
 
     }
 }

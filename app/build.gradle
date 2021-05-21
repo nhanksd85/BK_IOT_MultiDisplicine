@@ -40,4 +40,5 @@ dependencies {
     implementation 'org.eclipse.paho:org.eclipse.paho.android.service:1.1.1'
 //    compile 'com.github.mik3y:usb-serial-for-android:2.+'
     implementation 'com.github.mik3y:usb-serial-for-android:2.+'
+    implementation 'com.squareup.okhttp:okhttp:2.4.0'
 }

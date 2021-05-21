@@ -2,86 +2,139 @@
   {
     "id":"1",
     "name":"LED",
-    "unit":""
+    "unit":"",
+    "lastURL":"<Link>"
   },
   {
     "id":"2",
     "name":"SPEAKER",
-    "unit":""
+    "unit":"",
+    "lastURL":"<Link>"
   },
   {
     "id":"3",
     "name":"LCD",
-    "unit":""
+    "unit":"",
+    "lastURL":"<Link>"
   },
   {
     "id":"4",
     "name":"BUTTON",
-    "unit":""
+    "unit":"",
+    "lastURL":"<Link>"
   },
   {
     "id":"5",
     "name":"TOUCH",
-    "unit":""
+    "unit":"",
+    "lastURL":"<Link>"
   },
   {
     "id":"6",
     "name":"TRAFFIC",
-    "unit":""
+    "unit":"",
+    "lastURL":"<Link>"
   },
   {
     "id":"7",
     "name":"TEMP-HUMID",
-    "unit": "C-%"
+    "unit": "C-%",
+    "lastURL":"<Link>"
   },
   {
     "id":"8",
     "name":"MAGNETIC",
-    "unit":""
+    "unit":"",
+    "lastURL":"<Link>"
   },
   {
     "id":"9",
     "name":"SOIL",
-    "unit":"%"
+    "unit":"%",
+    "lastURL":"<Link>"
   },
   {
     "id":"10",
     "name":"DRV_PWM",
-    "unit":""
+    "unit":"",
+    "lastURL":"<Link>"
   },
   {
     "id":"11",
     "name":"RELAY",
-    "unit":""
+    "unit":"",
+    "lastURL":"<Link>"
   },
   {
     "id":"12",
     "name":"SOUND",
-    "unit":""
+    "unit":"",
+    "lastURL":"<Link>"
   },
   {
     "id":"13",
     "name":"LIGHT",
-    "unit":""
+    "unit":"",
+    "lastURL":"<Link>"
+  },
+  {
+    "id":"14",
+    "name":"",
+    "unit":"",
+    "lastURL":"none"
+  },
+  {
+    "id":"15",
+    "name":"",
+    "unit":"",
+    "lastURL":"none"
   },
   {
     "id":"16",
     "name":"INFRARED",
-    "unit":""
+    "unit":"",
+    "lastURL":"<Link>"
   },
   {
     "id":"17",
     "name":"SERVO",
-    "unit":"degree"
+    "unit":"degree",
+    "lastURL":"<Link>"
+  },
+  {
+    "id":"18",
+    "name":"",
+    "unit":"",
+    "lastURL":"<Link>"
+  },
+  {
+    "id":"19",
+    "name":"",
+    "unit":"",
+    "lastURL":"none"
+  },
+  {
+    "id":"20",
+    "name":"",
+    "unit":"",
+    "lastURL":"none"
+  },
+  {
+    "id":"21",
+    "name":"",
+    "unit":"",
+    "lastURL":"none"
   },
   {
     "id":"22",
     "name":"TIME",
-    "unit":""
+    "unit":"",
+    "lastURL":"<Link>"
   },
   {
     "id":"23",
     "name":"GAS",
-    "unit":""
+    "unit":"",
+    "lastURL":"<Link>"
   }
 ]

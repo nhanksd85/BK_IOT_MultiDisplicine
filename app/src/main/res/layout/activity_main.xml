@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:background="#00ffffff"
                 android:text="THOÁT"
-                android:textColor="#ffffff" />
+                android:textColor="#000000" />
 
         </LinearLayout>
     </LinearLayout>
@@ -75,7 +75,7 @@
                 android:layout_marginLeft="10dp"
                 android:gravity="left|bottom"
                 android:text="Hồ Chí Minh"
-                android:textColor="#ffffff"
+                android:textColor="#000000"
                 android:textStyle="bold" />
 
 
@@ -110,7 +110,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="20dp"
                 android:text="00°"
-                android:textColor="#ffffff"
+                android:textColor="#000000"
                 android:textSize="30dp" />
 
             <ImageView
@@ -124,7 +124,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="00%"
-                android:textColor="#ffffff"
+                android:textColor="#000000"
                 android:textSize="30dp" />
 
         </LinearLayout>
@@ -231,7 +231,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:gravity="center"
-                    android:text="TEMP-HUMID"
+                    android:text="MAGNETIC"
                     android:textColor="@color/colorTextCaption"
                     android:textSize="@dimen/caption_media_size" />
 
@@ -269,7 +269,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:gravity="center"
-                    android:text="MAGNETIC"
+                    android:text="SOIL"
                     android:textColor="@color/colorTextCaption"
                     android:textSize="@dimen/caption_media_size" />
 
@@ -307,7 +307,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:gravity="center"
-                    android:text="SOIL"
+                    android:text="SOUND"
                     android:textColor="@color/colorTextCaption"
                     android:textSize="@dimen/caption_media_size" />
 
@@ -331,7 +331,6 @@
                 </LinearLayout>
 
             </LinearLayout>
-
         </LinearLayout>
 
         <LinearLayout
@@ -353,7 +352,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:gravity="center"
-                    android:text="SOUND"
+                    android:text="LIGHT"
                     android:textColor="@color/colorTextCaption"
                     android:textSize="@dimen/caption_media_size" />
 
@@ -391,7 +390,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:gravity="center"
-                    android:text="LIGHT"
+                    android:text="INFRARED"
                     android:textColor="@color/colorTextCaption"
                     android:textSize="@dimen/caption_media_size" />
 
@@ -429,7 +428,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:gravity="center"
-                    android:text="INFRARED"
+                    android:text="TIME"
                     android:textColor="@color/colorTextCaption"
                     android:textSize="@dimen/caption_media_size" />
 
@@ -467,44 +466,6 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:gravity="center"
-                    android:text="TIME"
-                    android:textColor="@color/colorTextCaption"
-                    android:textSize="@dimen/caption_media_size" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/inout8"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_margin="2dp"
-                        android:layout_weight="2"
-                        android:gravity="center_horizontal|center_vertical"
-                        android:text="\?"
-                        android:textColor="@color/colorTextCaption"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_margin="3dp"
-                android:layout_weight="1"
-                android:background="#20000000"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:gravity="center"
                     android:text="GAS"
                     android:textColor="@color/colorTextCaption"
                     android:textSize="@dimen/caption_media_size" />
@@ -515,7 +476,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/inout9"
+                        android:id="@+id/inout8"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_margin="2dp"
@@ -561,7 +522,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/inout10"
+                        android:id="@+id/inout9"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_margin="2dp"
@@ -599,7 +560,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/inout11"
+                        android:id="@+id/inout10"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_margin="2dp"
@@ -637,7 +598,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/inout12"
+                        android:id="@+id/inout11"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_margin="2dp"
@@ -683,7 +644,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/inout13"
+                        android:id="@+id/inout12"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_margin="2dp"
@@ -722,7 +683,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/inout14"
+                        android:id="@+id/inout13"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_margin="2dp"
@@ -760,7 +721,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/inout15"
+                        android:id="@+id/inout14"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_margin="2dp"
@@ -798,7 +759,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/inout16"
+                        android:id="@+id/inout15"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_margin="2dp"
