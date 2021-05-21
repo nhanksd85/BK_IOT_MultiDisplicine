@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.hoho.android.usbserial.driver.UsbSerialDriver;
@@ -33,7 +34,7 @@ import java.nio.charset.Charset;
 import java.util.List;
 import java.util.concurrent.Executors;
 
-public class MainActivity extends AppCompatActivity implements SerialInputOutputManager.Listener {
+public class MainActivity extends AppCompatActivity implements SerialInputOutputManager.Listener, View.OnClickListener {
 
     public class Constants {
         public static final int NUM_TEXTVIEWS = 17;
@@ -43,6 +44,8 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
     final String TAG = "TEST_IOT";
     private String buffer = "";
     TextView[] textViews = new TextView[Constants.NUM_TEXTVIEWS];
+    TextView temp, humid;
+    Button buttonExit;
 
     JSONObject jsonObjectSend = new JSONObject();
     JSONArray jsonArray;
@@ -79,6 +82,11 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
             int resID = getResources().getIdentifier(buttonID, "id", getPackageName());
             textViews[i] = findViewById(resID);
         }
+
+        temp = findViewById(R.id.txtTemp);
+        humid = findViewById(R.id.txtHumi);
+        buttonExit = findViewById(R.id.btnExit);
+        buttonExit.setOnClickListener(this);
 
         String string = "nothing";
         InputStream inputStream = getResources().openRawResource(R.raw.info);
@@ -142,6 +150,12 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
                             break;
                         case 7:
                             textViews[2].setText(value);
+                            try {
+                                temp.setText(value.substring(0, value.indexOf('-')) + "\u2103");
+                                humid.setText(value.substring(value.indexOf('-') + 1, value.length()) + "\u0025");
+                            } catch (Exception e) {
+
+                            }
                             break;
                         case 8:
                             textViews[3].setText(value);
@@ -232,6 +246,14 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
             }
         }
 
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view.getId() == R.id.btnExit) {
+            finish();
+            System.exit(0);
+        }
     }
 
     @Override
