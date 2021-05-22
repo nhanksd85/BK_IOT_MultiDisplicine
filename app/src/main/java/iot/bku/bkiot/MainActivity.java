@@ -37,6 +37,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity implements SerialInputOutputManager.Listener, View.OnClickListener {
@@ -169,7 +171,10 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
                     Log.d("apiURL", apiURL);
                     Log.d("length", Integer.toString(apiURL.length()));
                     Log.d("none true?", Boolean.toString(none));
-                    receiveLastDataFromServer(scanFirstID, apiURL);
+                    //receiveLastDataFromServer(scanFirstID, apiURL);
+                    try {
+                        receiveLastDataFromServer(scanFirstID, apiURL);
+                    }catch (Exception e){}
                 }
             }
         } catch (JSONException e) {
@@ -180,6 +185,7 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
         startMQTT();
         buttonExit = findViewById(R.id.btnExit);
         buttonExit.setOnClickListener(this);
+        setupWDT();
     }
 
     private void startMQTT(){
@@ -265,6 +271,26 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
 
     }
 
+    private final int MAX_COUNTER = 60;
+    private int wdt_counter = MAX_COUNTER;
+    private void setupWDT(){
+        Timer wd_timer = new Timer();
+        TimerTask wd_task = new TimerTask() {
+            @Override
+            public void run() {
+                wdt_counter--;
+                if(wdt_counter <=0){
+                    wdt_counter = MAX_COUNTER;
+                    try{
+                        port.close();
+                    }catch (Exception e){}
+                    openUART();
+                }
+            }
+        };
+        wd_timer.schedule(wd_task,2000,1000);
+    }
+
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.btnExit) {
@@ -275,6 +301,9 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
 
     @Override
     public void onNewData(byte[] data) {
+        //reset wdt
+        wdt_counter = MAX_COUNTER;
+
         buffer += new String(data);
         Log.d("UART", "Received: " + new String(data));
         if (buffer.contains("!") && buffer.contains("#")) {
