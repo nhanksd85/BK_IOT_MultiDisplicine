@@ -3,79 +3,79 @@
     "id":"1",
     "name":"LED",
     "unit":"",
-    "lastURL":"<Link>"
+    "lastURL":"<link>"
   },
   {
     "id":"2",
     "name":"SPEAKER",
     "unit":"",
-    "lastURL":"<Link>"
+    "lastURL":"<link>"
   },
   {
     "id":"3",
     "name":"LCD",
     "unit":"",
-    "lastURL":"<Link>"
+    "lastURL":"<link>"
   },
   {
     "id":"4",
     "name":"BUTTON",
     "unit":"",
-    "lastURL":"<Link>"
+    "lastURL":"<link>"
   },
   {
     "id":"5",
     "name":"TOUCH",
     "unit":"",
-    "lastURL":"<Link>"
+    "lastURL":"<link>"
   },
   {
     "id":"6",
     "name":"TRAFFIC",
     "unit":"",
-    "lastURL":"<Link>"
+    "lastURL":"<link>"
   },
   {
     "id":"7",
     "name":"TEMP-HUMID",
     "unit": "C-%",
-    "lastURL":"<Link>"
+    "lastURL":"<link>"
   },
   {
     "id":"8",
     "name":"MAGNETIC",
     "unit":"",
-    "lastURL":"<Link>"
+    "lastURL":"<link>"
   },
   {
     "id":"9",
     "name":"SOIL",
     "unit":"%",
-    "lastURL":"<Link>"
+    "lastURL":"<link>"
   },
   {
     "id":"10",
     "name":"DRV_PWM",
     "unit":"",
-    "lastURL":"<Link>"
+    "lastURL":"<link>"
   },
   {
     "id":"11",
     "name":"RELAY",
     "unit":"",
-    "lastURL":"<Link>"
+    "lastURL":"<link>"
   },
   {
     "id":"12",
     "name":"SOUND",
     "unit":"",
-    "lastURL":"<Link>"
+    "lastURL":"<link>"
   },
   {
     "id":"13",
     "name":"LIGHT",
     "unit":"",
-    "lastURL":"<Link>"
+    "lastURL":"<link>"
   },
   {
     "id":"14",
@@ -93,19 +93,19 @@
     "id":"16",
     "name":"INFRARED",
     "unit":"",
-    "lastURL":"<Link>"
+    "lastURL":"<link>"
   },
   {
     "id":"17",
     "name":"SERVO",
     "unit":"degree",
-    "lastURL":"<Link>"
+    "lastURL":"<link>"
   },
   {
     "id":"18",
     "name":"",
     "unit":"",
-    "lastURL":"<Link>"
+    "lastURL":"none"
   },
   {
     "id":"19",
@@ -129,12 +129,12 @@
     "id":"22",
     "name":"TIME",
     "unit":"",
-    "lastURL":"<Link>"
+    "lastURL":"<link>"
   },
   {
     "id":"23",
     "name":"GAS",
     "unit":"",
-    "lastURL":"<Link>"
+    "lastURL":"<link>"
   }
 ]

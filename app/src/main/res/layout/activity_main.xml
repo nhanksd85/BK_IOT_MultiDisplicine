@@ -17,7 +17,7 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.3"
+            android:layout_weight="5"
             android:gravity="left">
 
             <ImageView
@@ -27,6 +27,19 @@
                 android:scaleType="fitCenter"
                 android:src="@drawable/logo"
                 android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="@font/alger"
+                android:gravity="fill_vertical|start"
+                android:text="CSE Multi-disciplinary Project"
+                android:textColor="@android:color/background_dark"
+                android:textSize="36sp"
+                android:textStyle="normal|bold" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -41,8 +54,9 @@
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:background="#00ffffff"
-                android:text="THOÁT"
-                android:textColor="#000000" />
+                android:text="EXIT"
+                android:textColor="#000000"
+                android:textSize="24sp" />
 
         </LinearLayout>
     </LinearLayout>
@@ -76,6 +90,7 @@
                 android:gravity="left|bottom"
                 android:text="Hồ Chí Minh"
                 android:textColor="#000000"
+                android:textSize="24sp"
                 android:textStyle="bold" />
 
 
@@ -133,12 +148,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.9"
+        android:layout_weight="1"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="horizontal">
 
@@ -153,7 +168,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
+                    android:layout_margin="0dp"
                     android:gravity="center"
                     android:text="BUTTON"
                     android:textColor="@color/colorTextCaption"
@@ -168,12 +183,12 @@
                         android:id="@+id/inout0"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_margin="2dp"
-                        android:layout_weight="2"
+                        android:layout_margin="0dp"
+                        android:layout_weight="1"
                         android:gravity="center_vertical|center_horizontal"
                         android:text="\?"
                         android:textColor="@color/colorTextCaption"
-                        android:textSize="20sp"
+                        android:textSize="38sp"
                         android:textStyle="bold" />
 
                 </LinearLayout>
@@ -191,7 +206,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
+
                     android:gravity="center"
                     android:text="TOUCH"
                     android:textColor="@color/colorTextCaption"
@@ -211,7 +226,7 @@
                         android:gravity="center_horizontal|center_vertical"
                         android:text="\?"
                         android:textColor="@color/colorTextCaption"
-                        android:textSize="20sp"
+                        android:textSize="38sp"
                         android:textStyle="bold" />
 
                 </LinearLayout>
@@ -229,7 +244,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
+
                     android:gravity="center"
                     android:text="MAGNETIC"
                     android:textColor="@color/colorTextCaption"
@@ -249,7 +264,7 @@
                         android:gravity="center_horizontal|center_vertical"
                         android:text="\?"
                         android:textColor="@color/colorTextCaption"
-                        android:textSize="20sp"
+                        android:textSize="38sp"
                         android:textStyle="bold" />
 
                 </LinearLayout>
@@ -267,7 +282,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
+
                     android:gravity="center"
                     android:text="SOIL"
                     android:textColor="@color/colorTextCaption"
@@ -287,7 +302,7 @@
                         android:gravity="center_horizontal|center_vertical"
                         android:text="\?"
                         android:textColor="@color/colorTextCaption"
-                        android:textSize="20sp"
+                        android:textSize="38sp"
                         android:textStyle="bold" />
 
                 </LinearLayout>
@@ -305,7 +320,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
+
                     android:gravity="center"
                     android:text="SOUND"
                     android:textColor="@color/colorTextCaption"
@@ -325,7 +340,7 @@
                         android:gravity="center_horizontal|center_vertical"
                         android:text="\?"
                         android:textColor="@color/colorTextCaption"
-                        android:textSize="20sp"
+                        android:textSize="38sp"
                         android:textStyle="bold" />
 
                 </LinearLayout>
@@ -335,7 +350,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="horizontal">
 
@@ -350,7 +365,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
+
                     android:gravity="center"
                     android:text="LIGHT"
                     android:textColor="@color/colorTextCaption"
@@ -370,7 +385,7 @@
                         android:gravity="center_horizontal|center_vertical"
                         android:text="\?"
                         android:textColor="@color/colorTextCaption"
-                        android:textSize="20sp"
+                        android:textSize="38sp"
                         android:textStyle="bold" />
 
                 </LinearLayout>
@@ -388,7 +403,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
+
                     android:gravity="center"
                     android:text="INFRARED"
                     android:textColor="@color/colorTextCaption"
@@ -408,7 +423,7 @@
                         android:gravity="center_horizontal|center_vertical"
                         android:text="\?"
                         android:textColor="@color/colorTextCaption"
-                        android:textSize="20sp"
+                        android:textSize="38sp"
                         android:textStyle="bold" />
 
                 </LinearLayout>
@@ -426,7 +441,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
+
                     android:gravity="center"
                     android:text="TIME"
                     android:textColor="@color/colorTextCaption"
@@ -446,7 +461,7 @@
                         android:gravity="center_horizontal|center_vertical"
                         android:text="\?"
                         android:textColor="@color/colorTextCaption"
-                        android:textSize="20sp"
+                        android:textSize="38sp"
                         android:textStyle="bold" />
 
                 </LinearLayout>
@@ -464,7 +479,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
+
                     android:gravity="center"
                     android:text="GAS"
                     android:textColor="@color/colorTextCaption"
@@ -484,7 +499,7 @@
                         android:gravity="center_horizontal|center_vertical"
                         android:text="\?"
                         android:textColor="@color/colorTextCaption"
-                        android:textSize="20sp"
+                        android:textSize="38sp"
                         android:textStyle="bold" />
 
                 </LinearLayout>
@@ -495,7 +510,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="horizontal">
 
@@ -510,7 +525,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
+
                     android:gravity="center"
                     android:text="LED"
                     android:textColor="@color/colorTextCaption"
@@ -530,7 +545,7 @@
                         android:gravity="center_horizontal|center_vertical"
                         android:text="\?"
                         android:textColor="@color/colorTextCaption"
-                        android:textSize="20sp"
+                        android:textSize="38sp"
                         android:textStyle="bold" />
 
                 </LinearLayout>
@@ -548,7 +563,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
+
                     android:gravity="center"
                     android:text="SPEAKER"
                     android:textColor="@color/colorTextCaption"
@@ -568,7 +583,7 @@
                         android:gravity="center_horizontal|center_vertical"
                         android:text="\?"
                         android:textColor="@color/colorTextCaption"
-                        android:textSize="20sp"
+                        android:textSize="38sp"
                         android:textStyle="bold" />
 
                 </LinearLayout>
@@ -586,7 +601,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
+
                     android:gravity="center"
                     android:text="LCD"
                     android:textColor="@color/colorTextCaption"
@@ -606,7 +621,7 @@
                         android:gravity="center_horizontal|center_vertical"
                         android:text="\?"
                         android:textColor="@color/colorTextCaption"
-                        android:textSize="20sp"
+                        android:textSize="38sp"
                         android:textStyle="bold" />
 
                 </LinearLayout>
@@ -617,7 +632,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="horizontal">
 
@@ -632,7 +647,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
+
                     android:gravity="center"
                     android:text="TRAFFIC"
                     android:textColor="@color/colorTextCaption"
@@ -652,7 +667,7 @@
                         android:gravity="center_horizontal|center_vertical"
                         android:text="\?"
                         android:textColor="@color/colorTextCaption"
-                        android:textSize="20sp"
+                        android:textSize="38sp"
                         android:textStyle="bold" />
 
 
@@ -671,7 +686,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
+
                     android:gravity="center"
                     android:text="DRV_PWM"
                     android:textColor="@color/colorTextCaption"
@@ -691,7 +706,7 @@
                         android:gravity="center_horizontal|center_vertical"
                         android:text="\?"
                         android:textColor="@color/colorTextCaption"
-                        android:textSize="20sp"
+                        android:textSize="38sp"
                         android:textStyle="bold" />
 
                 </LinearLayout>
@@ -709,7 +724,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
+
                     android:gravity="center"
                     android:text="RELAY"
                     android:textColor="@color/colorTextCaption"
@@ -729,7 +744,7 @@
                         android:gravity="center_horizontal|center_vertical"
                         android:text="\?"
                         android:textColor="@color/colorTextCaption"
-                        android:textSize="20sp"
+                        android:textSize="38sp"
                         android:textStyle="bold" />
 
                 </LinearLayout>
@@ -747,7 +762,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
+
                     android:gravity="center"
                     android:text="SERVO"
                     android:textColor="@color/colorTextCaption"
@@ -767,7 +782,7 @@
                         android:gravity="center_horizontal|center_vertical"
                         android:text="\?"
                         android:textColor="@color/colorTextCaption"
-                        android:textSize="20sp"
+                        android:textSize="38sp"
                         android:textStyle="bold" />
 
                 </LinearLayout>

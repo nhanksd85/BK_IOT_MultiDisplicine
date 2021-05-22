@@ -46,13 +46,14 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
         public static final int NUM_DEVICES = 23;
     }
 
-    MQTTHelper mqttHelper;
+    MQTTHelper mqttHelper, mqttHelper1;
     final String TAG = "TEST_IOT";
     private String buffer = "";
     TextView[] textViews = new TextView[Constants.NUM_INOUTS];
     TextView temp, humid;
     Button buttonExit;
     int scanFirstID;
+    boolean uartInitialized = false;
 
     JSONObject jsonObjectSend = new JSONObject();
     JSONArray jsonArray;
@@ -105,25 +106,25 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
                     mqttHelper.mqttAndroidClient.publish("CSE_BBC/feeds/bk-iot-drv", msg);
                     break;
                 case "11":
-                    mqttHelper.mqttAndroidClient1.publish("CSE_BBC1/feeds/bk-iot-relay", msg);
+                    mqttHelper1.mqttAndroidClient.publish("CSE_BBC1/feeds/bk-iot-relay", msg);
                     break;
                 case "12":
-                    mqttHelper.mqttAndroidClient1.publish("CSE_BBC1/feeds/bk-iot-sound", msg);
+                    mqttHelper1.mqttAndroidClient.publish("CSE_BBC1/feeds/bk-iot-sound", msg);
                     break;
                 case "13":
-                    mqttHelper.mqttAndroidClient1.publish("CSE_BBC1/feeds/bk-iot-light", msg);
+                    mqttHelper1.mqttAndroidClient.publish("CSE_BBC1/feeds/bk-iot-light", msg);
                     break;
                 case "16":
-                    mqttHelper.mqttAndroidClient1.publish("CSE_BBC1/feeds/bk-iot-infrared", msg);
+                    mqttHelper1.mqttAndroidClient.publish("CSE_BBC1/feeds/bk-iot-infrared", msg);
                     break;
                 case "17":
-                    mqttHelper.mqttAndroidClient1.publish("CSE_BBC1/feeds/bk-iot-servo", msg);
+                    mqttHelper1.mqttAndroidClient.publish("CSE_BBC1/feeds/bk-iot-servo", msg);
                     break;
                 case "22":
-                    mqttHelper.mqttAndroidClient1.publish("CSE_BBC1/feeds/bk-iot-time", msg);
+                    mqttHelper1.mqttAndroidClient.publish("CSE_BBC1/feeds/bk-iot-time", msg);
                     break;
                 case "23":
-                    mqttHelper.mqttAndroidClient.publish("CSE_BBC1/feeds/bk-iot-gas", msg);
+                    mqttHelper1.mqttAndroidClient.publish("CSE_BBC1/feeds/bk-iot-gas", msg);
                     break;
             }
         } catch (MqttException e){
@@ -160,31 +161,67 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
         } catch (JSONException e) {
             Log.d("jsonarray", "can not convert");
         }
+        openUART();
         try {
             for (scanFirstID = 1; scanFirstID < Constants.NUM_DEVICES + 1; scanFirstID++) {
                 JSONObject jsonObjectInit = jsonArray.getJSONObject(scanFirstID - 1);
                 String apiURL = jsonObjectInit.getString("lastURL");
-                boolean none = (apiURL.equals("none"));
                 if (!apiURL.equals("none")) {
                     Log.d("apiURL", apiURL);
                     Log.d("length", Integer.toString(apiURL.length()));
-                    Log.d("none true?", Boolean.toString(none));
                     receiveLastDataFromServer(scanFirstID, apiURL);
                 }
             }
         } catch (JSONException e) {
 
         }
-
-        openUART();
         startMQTT();
         buttonExit = findViewById(R.id.btnExit);
         buttonExit.setOnClickListener(this);
     }
 
     private void startMQTT(){
-        mqttHelper = new MQTTHelper(getApplicationContext(), Ultis.hashCode(Ultis.getCPUSerial()));
+        mqttHelper = new MQTTHelper(getApplicationContext(), "Phantom", "<subscriptionTopic>", "<username>", "<password>"); // Ultis.hashCode(Ultis.getCPUSerial())
         mqttHelper.setCallback(new MqttCallbackExtended() {
+            @Override
+            public void connectComplete(boolean b, String s) {
+                Log.d(TAG, "Init successful");
+            }
+
+            @Override
+            public void connectionLost(Throwable throwable) {
+                Log.d(TAG, "Connection lost");
+            }
+
+            @Override
+            public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
+                Log.d(TAG, "Message arrived");
+                Log.d(TAG, mqttMessage.toString());
+                String dataToGateway = "";
+                try {
+                    JSONObject jsonObjectReceive = new JSONObject(mqttMessage.toString());
+                    String ID = jsonObjectReceive.getString("ID");
+                    String value = jsonObjectReceive.getString("Value");
+                    updateTextView(ID, value);
+                    dataToGateway = "!" + ID + ":" + value + "#";
+                } catch (JSONException e) {
+                    Log.e("JSONException", "Error: " + e.toString());
+                }
+                try {
+                    port.write(dataToGateway.getBytes(), 1000);
+                } catch (Exception e) {
+
+                }
+            }
+
+            @Override
+            public void deliveryComplete(IMqttDeliveryToken iMqttDeliveryToken) {
+
+            }
+        });
+
+        mqttHelper1 = new MQTTHelper(getApplicationContext(), "Phantom1", "<subscriptionTopic1>", "<username1>", "<password1>"); // Ultis.hashCode(Ultis.getCPUSerial())
+        mqttHelper1.setCallback(new MqttCallbackExtended() {
             @Override
             public void connectComplete(boolean b, String s) {
                 Log.d(TAG, "Init successful");
@@ -262,7 +299,10 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
                 }
             }
         }
+        uartInitialized = true;
+        while (!uartInitialized) {
 
+        }
     }
 
     @Override
@@ -326,8 +366,10 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
                         JSONObject jsonObjectInitValue = new JSONObject(receive);
                         String value = jsonObjectInitValue.getString("Value");
                         String id = Integer.toString(ID);
+                        String initialDataForOutput = "!" + ID + ":" + value + "#";
                         Log.d("id", id);
                         updateTextView(id, value);
+                        port.write(initialDataForOutput.getBytes(), 1000);
                     } catch (JSONException e) {
                         Log.e("JSONException", "Error: " + e.toString());
                     }
