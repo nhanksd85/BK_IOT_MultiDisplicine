@@ -37,6 +37,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity implements SerialInputOutputManager.Listener, View.OnClickListener {
@@ -178,6 +180,27 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
         startMQTT();
         buttonExit = findViewById(R.id.btnExit);
         buttonExit.setOnClickListener(this);
+
+        setupWDT();
+    }
+
+    private int wdt_counter = 60;
+    private void setupWDT(){
+        final Timer wd_timer = new Timer();
+        TimerTask wd_task = new TimerTask() {
+            @Override
+            public void run() {
+                wdt_counter --;
+                if(wdt_counter <= 0){
+                    wdt_counter = 60;
+                    try{
+                        port.close();
+                    }catch (Exception e){}
+                    openUART();
+                }
+            }
+        };
+        wd_timer.schedule(wd_task, 5000, 1000);
     }
 
     private void startMQTT(){
@@ -315,6 +338,8 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
 
     @Override
     public void onNewData(byte[] data) {
+        wdt_counter = 60;
+
         buffer += new String(data);
         Log.d("UART", "Received: " + new String(data));
         if (buffer.contains("!") && buffer.contains("#")) {
