@@ -2,138 +2,161 @@
   {
     "id":"1",
     "name":"LED",
+    "feed":"bk-iot-led",
     "unit":"",
     "lastURL":"<link>"
   },
   {
     "id":"2",
     "name":"SPEAKER",
+    "feed":"bk-iot-speaker",
     "unit":"",
     "lastURL":"<link>"
   },
   {
     "id":"3",
     "name":"LCD",
+    "feed":"bk-iot-lcd",
     "unit":"",
-    "lastURL":"<link>"
+    lastURL":"<link>"
   },
   {
     "id":"4",
     "name":"BUTTON",
+    "feed":"bk-iot-button",
     "unit":"",
     "lastURL":"<link>"
   },
   {
     "id":"5",
     "name":"TOUCH",
+    "feed":"bk-iot-touch",
     "unit":"",
     "lastURL":"<link>"
   },
   {
     "id":"6",
     "name":"TRAFFIC",
+    "feed":"bk-iot-traffic",
     "unit":"",
     "lastURL":"<link>"
   },
   {
     "id":"7",
     "name":"TEMP-HUMID",
+    "feed":"bk-iot-temp-humid",
     "unit": "C-%",
     "lastURL":"<link>"
   },
   {
     "id":"8",
     "name":"MAGNETIC",
+    "feed":"bk-iot-magnetic",
     "unit":"",
     "lastURL":"<link>"
   },
   {
     "id":"9",
     "name":"SOIL",
+    "feed":"bk-iot-soil",
     "unit":"%",
     "lastURL":"<link>"
   },
   {
     "id":"10",
     "name":"DRV_PWM",
+    "feed":"bk-iot-drv",
     "unit":"",
     "lastURL":"<link>"
   },
   {
     "id":"11",
     "name":"RELAY",
+    "feed":"bk-iot-relay",
     "unit":"",
     "lastURL":"<link>"
   },
   {
     "id":"12",
     "name":"SOUND",
+    "feed":"bk-iot-sound",
     "unit":"",
     "lastURL":"<link>"
   },
   {
     "id":"13",
     "name":"LIGHT",
+    "feed":"bk-iot-light",
     "unit":"",
     "lastURL":"<link>"
   },
   {
     "id":"14",
     "name":"",
+    "feed":"",
     "unit":"",
     "lastURL":"none"
   },
   {
     "id":"15",
     "name":"",
+    "feed":"",
     "unit":"",
     "lastURL":"none"
   },
   {
     "id":"16",
     "name":"INFRARED",
+    "feed":"bk-iot-infrared",
     "unit":"",
     "lastURL":"<link>"
   },
   {
     "id":"17",
     "name":"SERVO",
+    "feed":"bk-iot-servo",
     "unit":"degree",
     "lastURL":"<link>"
   },
   {
     "id":"18",
     "name":"",
+    "feed":"",
     "unit":"",
     "lastURL":"none"
   },
   {
     "id":"19",
-    "name":"",
+    "name":"ACCELEROMETER",
+    "feed":"bk-iot-accelerometer",
     "unit":"",
-    "lastURL":"none"
+    "lastURL":"<link>"
   },
   {
     "id":"20",
     "name":"",
+    "feed":"",
     "unit":"",
     "lastURL":"none"
   },
   {
     "id":"21",
     "name":"",
+    "feed":"",
     "unit":"",
     "lastURL":"none"
   },
   {
     "id":"22",
     "name":"TIME",
+    "feed":"bk-iot-time",
     "unit":"",
     "lastURL":"<link>"
   },
   {
     "id":"23",
     "name":"GAS",
+    "feed":"bk-iot-gas",
     "unit":"",
     "lastURL":"<link>"
   }
