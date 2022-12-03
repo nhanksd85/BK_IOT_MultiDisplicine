@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.hoho.android.usbserial.driver.UsbSerialDriver;
 import com.hoho.android.usbserial.driver.UsbSerialPort;
@@ -31,12 +32,15 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
     private static final String INTENT_ACTION_GRANT_USB = BuildConfig.APPLICATION_ID + ".GRANT_USB";
 
     UsbSerialPort port;
+    TextView txtLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        startMQTT();
+        //startMQTT();
+        txtLocation = findViewById(R.id.txtLocation);
+        openUART();
     }
 
     private void startMQTT(){
@@ -71,9 +75,11 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
 
         if (availableDrivers.isEmpty()) {
             Log.d("UART", "UART is not available");
+            txtLocation.setText("UART is note available");
 
         }else {
             Log.d("UART", "UART is available");
+            txtLocation.setText("UART is available");
 
             UsbSerialDriver driver = availableDrivers.get(0);
             UsbDeviceConnection connection = manager.openDevice(driver.getDevice());
@@ -92,16 +98,18 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
                 try {
                     port.open(connection);
                     //port.setParameters(115200, 8, UsbSerialPort.STOPBITS_1, UsbSerialPort.PARITY_NONE);
-                    port.setParameters(9600, 8, UsbSerialPort.STOPBITS_1, UsbSerialPort.PARITY_NONE);
+                    port.setParameters(115200, 8, UsbSerialPort.STOPBITS_1, UsbSerialPort.PARITY_NONE);
 
                     //port.write("ABC#".getBytes(), 1000);
 
                     SerialInputOutputManager usbIoManager = new SerialInputOutputManager(port, this);
                     Executors.newSingleThreadExecutor().submit(usbIoManager);
                     Log.d("UART", "UART is openned");
+                    txtLocation.setText("UART is openned");
 
                 } catch (Exception e) {
                     Log.d("UART", "There is error");
+                    txtLocation.setText("There is error");
                 }
             }
         }
