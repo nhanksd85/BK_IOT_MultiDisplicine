@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
             @Override
             public void run() {
                 timerRun();
+                ai_fsm();
             }
         };
         aTimer.schedule(aTask, 1000,1000);
@@ -118,12 +119,13 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
             case 1:
                 //Talking
                 talkToMe(ai_voice);
-                setTimer(5);
+                setTimer(3);
                 status = 2;
                 break;
             case 2:
                 if(timer_flag == 1){
                     status = 0;
+                    txtLocation.setText("");
                 }
                 break;
             default:
@@ -212,10 +214,13 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
         data = data.replaceAll("!", "");
         data = data.replaceAll("#", "");
         int index = Integer.parseInt(data);
-        if(index < 10){
-            ai_voice = txtIDs[index].getText().toString();
-            if(status == 0)
-                status = 1;
+        txtLocation.setText("SA: " + data + "***" + index);
+//        txtLocation.setText(index);
+        if(index <= 10){
+            ai_voice = txtIDs[index -1].getText().toString();
+//            if(status == 0)
+//                status = 1;
+            talkToMe(ai_voice);
         }
     }
 
@@ -223,9 +228,13 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
     public void onNewData(byte[] data) {
         buffer += new String(data);
         Log.d("UART", "Received: " + new String(data));
+
         if (buffer.contains("!") && buffer.contains("#")) {
             processData(buffer);
+            //txtLocation.setText("MA:" + buffer);
             buffer = "";
+        }else{
+            txtLocation.setText("NA:" + buffer);
         }
     }
 
