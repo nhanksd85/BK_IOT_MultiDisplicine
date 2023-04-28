@@ -41,8 +41,10 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
 
     private static final String ACTION_USB_PERMISSION = "com.android.recipes.USB_PERMISSION";
     private static final String INTENT_ACTION_GRANT_USB = BuildConfig.APPLICATION_ID + ".GRANT_USB";
-
     UsbSerialPort port;
+
+
+
     TextView txtLocation;
     EditText[] txtIDs = new EditText[10];
     Button btnSave;
@@ -54,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
         //startMQTT();
         txtLocation = findViewById(R.id.txtLocation);
         openUART();
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         txtIDs[0] = findViewById(R.id.txtID_1);
         txtIDs[1] = findViewById(R.id.txtID_2);
         txtIDs[2] = findViewById(R.id.txtID_3);
@@ -195,6 +197,9 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
 
                     SerialInputOutputManager usbIoManager = new SerialInputOutputManager(port, this);
                     Executors.newSingleThreadExecutor().submit(usbIoManager);
+
+
+
                     Log.d("UART", "UART is openned");
                     txtLocation.setText("UART is openned");
 
@@ -213,15 +218,28 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
     void processData(String data) {
         data = data.replaceAll("!", "");
         data = data.replaceAll("#", "");
-        int index = Integer.parseInt(data);
-        txtLocation.setText("SA: " + data + "***" + index);
-//        txtLocation.setText(index);
-        if(index <= 10){
-            ai_voice = txtIDs[index -1].getText().toString();
-//            if(status == 0)
-//                status = 1;
-            talkToMe(ai_voice);
+
+        if(data.contains("1")){
+            talkToMe("Xin chào anh A");
+        }else if(data.contains("2")){
+            talkToMe("Xin chào anh B");
+        }else if(data.contains("3")){
+            talkToMe("Xin chào anh C");
+        }else if(data.contains("4")){
+            talkToMe("Xin chào anh D");
         }
+
+
+
+//        int index = Integer.parseInt(data);
+//        txtLocation.setText("SA: " + data + "***" + index);
+////        txtLocation.setText(index);
+//        if(index <= 10){
+//            ai_voice = txtIDs[index -1].getText().toString();
+////            if(status == 0)
+////                status = 1;
+//            talkToMe(ai_voice);
+//        }
     }
 
     @Override

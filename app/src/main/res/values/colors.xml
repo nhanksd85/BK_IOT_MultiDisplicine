@@ -4,4 +4,8 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorTextCaption">#000000</color>
+    <color name="colorTextCurent">#ff0000</color>
+    <color name="colorTextVolt">#0000ff</color>
+    <color name="colorTextPower">#aa00aa</color>
+
 </resources>
