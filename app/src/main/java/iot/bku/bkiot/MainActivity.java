@@ -293,7 +293,7 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
     public void onInit(int initStatus) {
         if (initStatus == TextToSpeech.SUCCESS) {
             niceTTS.setLanguage(Locale.forLanguageTag("VI"));
-            talkToMe("Xin chào các bạn, tôi là hệ thống nhận diện khuôn mặt");
+            talkToMe("Xin chào các bạn, tôi là hệ thống trợ lý ảo nhân tạo. Bạn có thể hỏi tôi các vấn đề về nước");
         }
     }
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
