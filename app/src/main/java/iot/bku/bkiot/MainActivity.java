@@ -2,12 +2,14 @@ package iot.bku.bkiot;
 
 import android.app.Activity;
 import android.app.PendingIntent;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbManager;
+import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,17 +17,24 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.hoho.android.usbserial.driver.UsbSerialDriver;
 import com.hoho.android.usbserial.driver.UsbSerialPort;
 import com.hoho.android.usbserial.driver.UsbSerialProber;
 import com.hoho.android.usbserial.util.SerialInputOutputManager;
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
@@ -34,6 +43,8 @@ import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity implements SerialInputOutputManager.Listener, TextToSpeech.OnInitListener {
 
+
+    OkHttpClient client = new OkHttpClient();
 
     final String TAG = "TEST_IOT";
 
@@ -48,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
     TextView txtLocation;
     EditText[] txtIDs = new EditText[10];
     Button btnSave;
-
+    private ImageButton btnVoice;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,7 +109,42 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
         aTimer.schedule(aTask, 1000,1000);
 
 
+
+        btnVoice = findViewById(R.id.btnVoice);
+
+        btnVoice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startVoiceInput();
+            }
+        });
     }
+
+
+    private static final int REQ_CODE_SPEECH_INPUT = 100;
+    public void startVoiceInput() {
+
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        //intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,"vi-VN");
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Xin mời nói...");
+        intent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
+
+        try {
+            //isProcessingSearch = true;
+            startActivityForResult(intent, REQ_CODE_SPEECH_INPUT);
+            //layoutHeader.setVisibility(View.INVISIBLE);
+        } catch (ActivityNotFoundException a) {
+            //isProcessingSearch = false;
+            //layoutHeader.setVisibility(View.VISIBLE);
+        }
+
+    }
+
+
+
+
     int timer_counter = 0;
     int timer_flag = 0;
     public void timerRun(){
@@ -293,9 +339,34 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
     public void onInit(int initStatus) {
         if (initStatus == TextToSpeech.SUCCESS) {
             niceTTS.setLanguage(Locale.forLanguageTag("VI"));
-            talkToMe("Xin chào các bạn, tôi là hệ thống trợ lý ảo nhân tạo. Bạn có thể hỏi tôi các vấn đề về nước");
+            //talkToMe("Xin chào các bạn, tôi là hệ thống trợ lý ảo nhân tạo. Bạn có thể hỏi tôi các vấn đề về nước");
         }
     }
+
+    private void getChatGPTAnswer(String question){
+        final Request request = new Request.Builder()
+                .url("http://lpnserver.net:51087/chat?c=" + question)
+                .build();
+        try {
+            //Response response = client.newCall(request).execute();
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Request request, IOException e) {
+
+                }
+
+                @Override
+                public void onResponse(Response response) throws IOException {
+                    String msg = response.body().string();
+
+                    talkToMe(msg);
+                }
+            });
+        }catch (Exception e){}
+    }
+
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //do they have the data
         if (requestCode == DATA_CHECKING) {
@@ -308,8 +379,23 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
                 promptInstall.setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
                 startActivity(promptInstall);
             }
+        }else if(requestCode == REQ_CODE_SPEECH_INPUT){
+            if (resultCode == RESULT_OK && null != data) {
+                ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                Log.d("Assistant", result.get(0));
+
+
+                if (result.size() > 0) {
+                    String msg = result.get(0).toLowerCase().trim();
+                    getChatGPTAnswer(msg);
+                }
+            }else{
+                //isProcessingSearch = false;
+            }
         }
     }
+
+
 
     public void talkToMe(String sentence) {
         String speakWords = sentence;

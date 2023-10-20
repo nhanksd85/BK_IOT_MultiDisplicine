@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "iot.bku.bkiot"
+        applicationId "iot.bku.bkiot.chatgpt"
         minSdkVersion 26
         targetSdkVersion 28
         versionCode 1
@@ -38,4 +38,6 @@ dependencies {
     compile 'com.github.mik3y:usb-serial-for-android:2.+'
     implementation 'com.github.angads25:toggle:1.1.0'
     compile 'com.github.zcweng:switch-button:0.0.3@aar'
+
+    compile 'com.squareup.okhttp:okhttp:2.5.0'
 }
