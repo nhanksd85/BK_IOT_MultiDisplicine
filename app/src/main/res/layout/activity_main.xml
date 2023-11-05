@@ -11,35 +11,170 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:orientation="horizontal"
-        android:layout_marginBottom="20dp">
+        android:layout_height="0dp"
+        android:layout_weight="7"
+        android:orientation="vertical">
         <LinearLayout
-            android:gravity="left"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_margin="10dp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="#6200EE"
+                android:orientation="vertical">
+                <ImageView
+                    android:layout_margin="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/ph_icon"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:text="7"
+                    android:textSize="45dp"
+                    android:textAlignment="center"
+                    android:textStyle="bold"
+                    android:textColor="#ffffff"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_margin="10dp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="#018786"
+                android:orientation="vertical">
+                <ImageView
+                    android:layout_margin="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/tds_icon"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:text="50"
+                    android:textSize="45dp"
+                    android:textAlignment="center"
+                    android:textStyle="bold"
+                    android:textColor="#ffffff"/>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_margin="10dp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="#0336FF"
+                android:orientation="vertical">
+                <ImageView
+                    android:layout_margin="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/temp_icon"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:text="7°C"
+                    android:textSize="45dp"
+                    android:textAlignment="center"
+                    android:textStyle="bold"
+                    android:textColor="#ffffff"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_margin="10dp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="#03DAC6"
+                android:orientation="vertical">
+                <ImageView
+                    android:layout_margin="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/humi_icon"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:text="50%"
+                    android:textSize="45dp"
+                    android:textAlignment="center"
+                    android:textStyle="bold"
+                    android:textColor="#ffffff"/>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.2">
+            <TextView
             android:layout_width="0dp"
-            android:layout_weight="0.3"
-            android:layout_height="match_parent">
-            <ImageView
-                android:layout_margin="2dp"
-                android:visibility="visible"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="MÁY BƠM"
+            android:textAlignment="center"
+            android:textSize="20dp"
+            android:textColor="#FF0000"
+            android:textStyle="bold"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="BÓNG ĐÈN"
+                android:textAlignment="center"
+                android:textSize="20dp"
+                android:textColor="#FF0000"
+                android:textStyle="bold"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="-10dp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"
+            android:orientation="horizontal">
+            <com.suke.widget.SwitchButton
+            android:id="@+id/btnPump"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textSize="@dimen/button_text_size"
+            android:layout_margin="@dimen/standard_margin" />
+
+            <com.suke.widget.SwitchButton
+                android:id="@+id/btnLed"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textSize="@dimen/button_text_size"
+                android:layout_margin="@dimen/standard_margin" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.4">
+            <TextView
+                android:id="@+id/txtChatGPT"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/logo123"
-                android:scaleType="fitCenter" />
+                android:scrollbars = "vertical"
+                android:gravity="top"
+                />
         </LinearLayout>
-        <TextView
-            android:visibility="gone"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.5"
-            android:id="@+id/txtLocation"/>
-        <Button
-            android:visibility="gone"
-            android:id="@+id/btnSave"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.2"
-            android:text="SAVE" />
     </LinearLayout>
 
     <LinearLayout

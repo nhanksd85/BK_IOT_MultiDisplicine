@@ -13,6 +13,7 @@ import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -28,12 +29,15 @@ import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
+import com.suke.widget.SwitchButton;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
+import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -56,39 +60,25 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
 
 
 
-    TextView txtLocation;
+    TextView txtChatGPT;
     EditText[] txtIDs = new EditText[10];
     Button btnSave;
     private ImageButton btnVoice;
+    SwitchButton btnPump, btnLed;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //startMQTT();
-        txtLocation = findViewById(R.id.txtLocation);
-        openUART();
+        startMQTT();
+
+        //openUART();
         //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        txtIDs[0] = findViewById(R.id.txtID_1);
-        txtIDs[1] = findViewById(R.id.txtID_2);
-        txtIDs[2] = findViewById(R.id.txtID_3);
-        txtIDs[3] = findViewById(R.id.txtID_4);
-        txtIDs[4] = findViewById(R.id.txtID_5);
 
-        txtIDs[5] = findViewById(R.id.txtID_6);
-        txtIDs[6] = findViewById(R.id.txtID_7);
-        txtIDs[7] = findViewById(R.id.txtID_8);
-        txtIDs[8] = findViewById(R.id.txtID_9);
-        txtIDs[9] = findViewById(R.id.txtID_10);
 
-        loadSettingData();
 
-        btnSave = findViewById(R.id.btnSave);
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                saveSettingData();
-            }
-        });
+
+
 
         //create an Intent
         Intent checkData = new Intent();
@@ -118,8 +108,51 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
                 startVoiceInput();
             }
         });
+
+
+        txtChatGPT = findViewById(R.id.txtChatGPT);
+        txtChatGPT.setMovementMethod(new ScrollingMovementMethod());
+
+        btnPump = findViewById(R.id.btnPump);
+        btnLed = findViewById(R.id.btnLed);
+
+        btnPump.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(SwitchButton view, boolean isChecked) {
+                if (isChecked){
+                    sendDataMQTT("nongnghiep40/feeds/V11", "1");
+                }else{
+                    sendDataMQTT("nongnghiep40/feeds/V11", "0");
+                }
+            }
+        });
+        btnLed.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(SwitchButton view, boolean isChecked) {
+                if (isChecked){
+                    sendDataMQTT("nongnghiep40/feeds/V13", "1");
+                }else{
+                    sendDataMQTT("nongnghiep40/feeds/V13", "0");
+                }
+            }
+        });
     }
 
+
+    public void sendDataMQTT(String topic, String value){
+        MqttMessage msg = new MqttMessage();
+        msg.setId(1234);
+        msg.setQos(0);
+        msg.setRetained(false);
+
+        byte[] b = value.getBytes(Charset.forName("UTF-8"));
+        msg.setPayload(b);
+
+        try {
+            mqttHelper.mqttAndroidClient.publish(topic, msg);
+        }catch (MqttException e){
+        }
+    }
 
     private static final int REQ_CODE_SPEECH_INPUT = 100;
     public void startVoiceInput() {
@@ -173,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
             case 2:
                 if(timer_flag == 1){
                     status = 0;
-                    txtLocation.setText("");
+                    //txtLocation.setText("");
                 }
                 break;
             default:
@@ -198,7 +231,7 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
             @Override
             public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
 
-
+                Log.d("mqtt", topic + "*****" + mqttMessage.toString());
             }
 
             @Override
@@ -214,11 +247,11 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
 
         if (availableDrivers.isEmpty()) {
             Log.d("UART", "UART is not available");
-            txtLocation.setText("UART is note available");
+            //txtLocation.setText("UART is note available");
 
         } else {
             Log.d("UART", "UART is available");
-            txtLocation.setText("UART is available");
+            //txtLocation.setText("UART is available");
 
             UsbSerialDriver driver = availableDrivers.get(0);
             UsbDeviceConnection connection = manager.openDevice(driver.getDevice());
@@ -247,11 +280,11 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
 
 
                     Log.d("UART", "UART is openned");
-                    txtLocation.setText("UART is openned");
+                    //txtLocation.setText("UART is openned");
 
                 } catch (Exception e) {
                     Log.d("UART", "There is error");
-                    txtLocation.setText("There is error");
+                    //txtLocation.setText("There is error");
                 }
             }
         }
@@ -298,7 +331,7 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
             //txtLocation.setText("MA:" + buffer);
             buffer = "";
         }else{
-            txtLocation.setText("NA:" + buffer);
+            //txtLocation.setText("NA:" + buffer);
         }
     }
 
@@ -344,6 +377,13 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
     }
 
     private void getChatGPTAnswer(String question){
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                txtChatGPT.setText("Đang xử lý...");
+            }
+        });
         final Request request = new Request.Builder()
                 .url("http://lpnserver.net:51087/chat?c=" + question)
                 .build();
@@ -397,7 +437,14 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
 
 
 
-    public void talkToMe(String sentence) {
+    public void talkToMe(final String sentence) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                txtChatGPT.setText(sentence);
+            }
+        });
+
         String speakWords = sentence;
         niceTTS.speak(speakWords, TextToSpeech.QUEUE_FLUSH, null);
     }

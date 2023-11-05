@@ -23,14 +23,22 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 public class MQTTHelper {
 
-    final String serverUri = "tcp://io.adafruit.com:1883";
+
+//    nongnghiep40/feeds/V1: pH
+//    nongnghiep40/feeds/V2: tds
+//    nongnghiep40/feeds/V11: máy bơm
+//    nongnghiep40/feeds/V13: đèn
+//    nongnghiep40/feeds/V16: độ ẩm
+//    nongnghiep40/feeds/V17: nhiệt độ
+
+    final String serverUri = "tcp://mqtt.ohstem.vn:1883";
 
 
     private String clientId = "";
-    final String subscriptionTopic = "NPNLab_BBC/f/+";
+    final String[] subscriptionTopic = {"nongnghiep40/feeds/V1", "nongnghiep40/feeds/V2", "nongnghiep40/feeds/V16", "nongnghiep40/feeds/V17 "};
 
 
-    final String username = "NPNLab_BBC";
+    final String username = "nongnghiep40";
     final String password = "aio_uGgA75WHzFBjnu72A2CQ7bUnBcpm";
 
     public MqttAndroidClient mqttAndroidClient;
@@ -102,23 +110,26 @@ public class MQTTHelper {
     }
 
     private void subscribeToTopic() {
-        try {
-            mqttAndroidClient.subscribe(subscriptionTopic, 0, null, new IMqttActionListener() {
-                @Override
-                public void onSuccess(IMqttToken asyncActionToken) {
-                    Log.w("Mqtt","Subscribed!");
+        for (int i = 0; i < subscriptionTopic.length; i++) {
+            try {
+                mqttAndroidClient.subscribe(subscriptionTopic[i], 0, null, new IMqttActionListener() {
+                        @Override
+                        public void onSuccess(IMqttToken asyncActionToken) {
+                            Log.w("Mqtt", "Subscribed!");
 
-                }
+                        }
 
-                @Override
-                public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-                    Log.w("Mqtt", "Subscribed fail!");
-                }
-            });
+                        @Override
+                        public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+                            Log.w("Mqtt", "Subscribed fail!");
+                        }
+                    });
 
-        } catch (MqttException ex) {
-            System.err.println("Exceptionst subscribing");
-            ex.printStackTrace();
+            } catch(MqttException ex){
+                System.err.println("Exceptionst subscribing");
+                ex.printStackTrace();
+            }
+
         }
     }
 }
