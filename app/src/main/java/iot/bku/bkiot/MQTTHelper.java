@@ -35,7 +35,13 @@ public class MQTTHelper {
 
 
     private String clientId = "";
-    final String[] subscriptionTopic = {"nongnghiep40/feeds/V1", "nongnghiep40/feeds/V2", "nongnghiep40/feeds/V16", "nongnghiep40/feeds/V17 "};
+    final String[] subscriptionTopic = {
+            "nongnghiep40/feeds/V1",
+            "nongnghiep40/feeds/V2",
+            "nongnghiep40/feeds/V16",
+            "nongnghiep40/feeds/V17",
+            "nongnghiep40/feeds/V11",
+            "nongnghiep40/feeds/V13"};
 
 
     final String username = "nongnghiep40";

@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbManager;
+import android.icu.util.LocaleData;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
@@ -65,7 +66,8 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
     Button btnSave;
     private ImageButton btnVoice;
     SwitchButton btnPump, btnLed;
-
+    int statusPump, statusLed;
+    TextView txtPH, txtTDS, txtTemp, txtHumi;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,6 +138,14 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
                 }
             }
         });
+        btnPump.setChecked(true);
+        btnLed.setChecked(true);
+        statusPump = - 1;
+        statusLed = -1;
+        txtPH = findViewById(R.id.txtPH);
+        txtTDS = findViewById(R.id.txtTDS);
+        txtTemp = findViewById(R.id.txtTemp);
+        txtHumi = findViewById(R.id.txtHumi);
     }
 
 
@@ -232,6 +242,47 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
             public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
 
                 Log.d("mqtt", topic + "*****" + mqttMessage.toString());
+                if(topic.contains("nongnghiep40/feeds/V11")){
+                    if(mqttMessage.toString().equals("1")){
+                        Log.d("mqtt", "SET TRUE");
+                        if(statusPump != 1) {
+                            btnPump.setChecked(true);
+                            Log.d("mqtt", "REAL SET TRUE");
+                            statusPump = 1;
+                        }
+
+                    }
+                    else {
+                        Log.d("mqtt", "SET FALSE");
+
+                        if(statusPump != 0) {
+                            btnPump.setChecked(false);
+                            Log.d("mqtt", "REAL SET TRUE");
+                            statusPump = 0;
+                        }
+                    }
+                }else if(topic.contains("nongnghiep40/feeds/V13")){
+                    if(mqttMessage.toString().equals("1")){
+                        if(statusLed != 1) {
+                            btnLed.setChecked(true);
+                            statusLed = 1;
+                        }
+                    }
+                    else {
+                        if(statusLed != 0) {
+                            btnLed.setChecked(false);
+                            statusLed = 0;
+                        }
+                    }
+                }else if(topic.contains("nongnghiep40/feeds/V1")){
+                    txtPH.setText(mqttMessage.toString());
+                }else if(topic.contains("nongnghiep40/feeds/V2")){
+                    txtTDS.setText(mqttMessage.toString() + "ppm");
+                }else if(topic.contains("nongnghiep40/feeds/V16")){
+                    txtTemp.setText(mqttMessage.toString() + "°C");
+                }else if(topic.contains("nongnghiep40/feeds/V17")){
+                    txtHumi.setText(mqttMessage.toString() + "%");
+                }
             }
 
             @Override
@@ -382,10 +433,11 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
             @Override
             public void run() {
                 txtChatGPT.setText("Đang xử lý...");
+                Log.d("mqtt", "Đang xử lý...");
             }
         });
         final Request request = new Request.Builder()
-                .url("http://lpnserver.net:51087/chat?c=" + question)
+                .url("http://lpnserver.net:51087/test?c=" + question)
                 .build();
         try {
             //Response response = client.newCall(request).execute();
@@ -398,7 +450,7 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
                 @Override
                 public void onResponse(Response response) throws IOException {
                     String msg = response.body().string();
-
+                    Log.d("mqtt", msg);
                     talkToMe(msg);
                 }
             });
@@ -420,9 +472,10 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
                 startActivity(promptInstall);
             }
         }else if(requestCode == REQ_CODE_SPEECH_INPUT){
+            Log.d("mqtt", requestCode + "****" +resultCode );
             if (resultCode == RESULT_OK && null != data) {
                 ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                Log.d("Assistant", result.get(0));
+                Log.d("mqtt", result.get(0));
 
 
                 if (result.size() > 0) {
@@ -431,6 +484,11 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
                 }
             }else{
                 //isProcessingSearch = false;
+                Log.d("mqtt", "You are here");
+                if(data != null){
+                    ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    Log.d("mqtt", result.get(0));
+                }
             }
         }
     }
