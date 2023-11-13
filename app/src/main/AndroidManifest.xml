@@ -11,6 +11,9 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/logoapp"
@@ -18,7 +21,7 @@
         android:roundIcon="@drawable/logoapp"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".MainActivity">
+        <activity  android:screenOrientation="landscape" android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

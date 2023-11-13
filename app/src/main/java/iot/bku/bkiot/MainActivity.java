@@ -1,3 +1,4 @@
+//https://github.com/gotev/android-speech
 package iot.bku.bkiot;
 
 import android.app.Activity;
@@ -122,9 +123,9 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
             @Override
             public void onCheckedChanged(SwitchButton view, boolean isChecked) {
                 if (isChecked){
-                    sendDataMQTT("nongnghiep40/feeds/V11", "1");
+                    sendDataMQTT("LVM_IoT/feeds/V2", "1");
                 }else{
-                    sendDataMQTT("nongnghiep40/feeds/V11", "0");
+                    sendDataMQTT("LVM_IoT/feeds/V2", "0");
                 }
             }
         });
@@ -132,9 +133,9 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
             @Override
             public void onCheckedChanged(SwitchButton view, boolean isChecked) {
                 if (isChecked){
-                    sendDataMQTT("nongnghiep40/feeds/V13", "1");
+                    sendDataMQTT("LVM_IoT/feeds/V1", "1");
                 }else{
-                    sendDataMQTT("nongnghiep40/feeds/V13", "0");
+                    sendDataMQTT("LVM_IoT/feeds/V1", "0");
                 }
             }
         });
@@ -168,12 +169,13 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
     public void startVoiceInput() {
 
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        //intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        //intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
         //intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,"vi-VN");
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Xin mời nói...");
-        intent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
-
+        //intent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
+        intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE,
+                "iot.bku.bkiot.chatgpt");
         try {
             //isProcessingSearch = true;
             startActivityForResult(intent, REQ_CODE_SPEECH_INPUT);
@@ -241,8 +243,8 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
             @Override
             public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
 
-                Log.d("mqtt", topic + "*****" + mqttMessage.toString());
-                if(topic.contains("nongnghiep40/feeds/V11")){
+                Log.d("mqtt","Message Arrived: " + topic + "*****" + mqttMessage.toString());
+                if(topic.equals("LVM_IoT/feeds/V1")){
                     if(mqttMessage.toString().equals("1")){
                         Log.d("mqtt", "SET TRUE");
                         if(statusPump != 1) {
@@ -261,7 +263,7 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
                             statusPump = 0;
                         }
                     }
-                }else if(topic.contains("nongnghiep40/feeds/V13")){
+                }else if(topic.equals("LVM_IoT/feeds/V2")){
                     if(mqttMessage.toString().equals("1")){
                         if(statusLed != 1) {
                             btnLed.setChecked(true);
@@ -274,14 +276,23 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
                             statusLed = 0;
                         }
                     }
-                }else if(topic.contains("nongnghiep40/feeds/V1")){
+                }else if(topic.equals("LVM_IoT/feeds/V3")){
                     txtPH.setText(mqttMessage.toString());
-                }else if(topic.contains("nongnghiep40/feeds/V2")){
+                }else if(topic.equals("LVM_IoT/feeds/V4")){
                     txtTDS.setText(mqttMessage.toString() + "ppm");
-                }else if(topic.contains("nongnghiep40/feeds/V16")){
+                }else if(topic.equals("LVM_IoT/feeds/V5")){
                     txtTemp.setText(mqttMessage.toString() + "°C");
-                }else if(topic.contains("nongnghiep40/feeds/V17")){
+                }else if(topic.equals("LVM_IoT/feeds/V6")){
                     txtHumi.setText(mqttMessage.toString() + "%");
+                }else if(topic.equals("LVM_IoT/feeds/V8")){
+                    //txtHumi.setText(mqttMessage.toString() + "%");
+                    talkToMe(mqttMessage.toString());
+                }else if(topic.equals("LVM_IoT/feeds/V9")){
+                    //txtHumi.setText(mqttMessage.toString() + "%");
+                    String msg = mqttMessage.toString().toLowerCase();
+
+                    getChatGPTAnswer(msg);
+
                 }
             }
 
@@ -423,7 +434,7 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
     public void onInit(int initStatus) {
         if (initStatus == TextToSpeech.SUCCESS) {
             niceTTS.setLanguage(Locale.forLanguageTag("VI"));
-            //talkToMe("Xin chào các bạn, tôi là hệ thống trợ lý ảo nhân tạo. Bạn có thể hỏi tôi các vấn đề về nước");
+            //talkToMe("Xin chào các bạn, tôi là hệ thống trợ lý ảo nhân tạo.");
         }
     }
 
@@ -485,6 +496,7 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
             }else{
                 //isProcessingSearch = false;
                 Log.d("mqtt", "You are here");
+                getChatGPTAnswer("Xin chào chat GPT");
                 if(data != null){
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     Log.d("mqtt", result.get(0));
@@ -500,10 +512,12 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
             @Override
             public void run() {
                 txtChatGPT.setText(sentence);
+                Log.d("mqtt", "Talk to me " + sentence);
+                String speakWords = sentence;
+                niceTTS.speak(speakWords, TextToSpeech.QUEUE_FLUSH, null);
             }
         });
 
-        String speakWords = sentence;
-        niceTTS.speak(speakWords, TextToSpeech.QUEUE_FLUSH, null);
+
     }
 }

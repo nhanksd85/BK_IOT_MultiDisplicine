@@ -36,16 +36,13 @@ public class MQTTHelper {
 
     private String clientId = "";
     final String[] subscriptionTopic = {
-            "nongnghiep40/feeds/V1",
-            "nongnghiep40/feeds/V2",
-            "nongnghiep40/feeds/V16",
-            "nongnghiep40/feeds/V17",
-            "nongnghiep40/feeds/V11",
-            "nongnghiep40/feeds/V13"};
+            "LVM_IoT/feeds/V8",
+            "LVM_IoT/feeds/V9",
+    };
 
 
-    final String username = "nongnghiep40";
-    final String password = "aio_uGgA75WHzFBjnu72A2CQ7bUnBcpm";
+    final String username = "LVM_IoT";
+    final String password = "abcd1234";
 
     public MqttAndroidClient mqttAndroidClient;
 

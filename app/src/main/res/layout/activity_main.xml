@@ -10,6 +10,7 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="7"
@@ -173,7 +174,7 @@
             android:layout_height="0dp"
             android:layout_weight="0.4">
             <TextView
-                android:id="@+id/txtChatGPT"
+                android:id="@+id/txtChatGPT1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scrollbars = "vertical"
@@ -183,6 +184,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -208,7 +210,19 @@
             android:textSize="30dp"/>
 
     </LinearLayout>
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.4">
+        <TextView
+            android:id="@+id/txtChatGPT"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars = "vertical"
+            android:gravity="top"
+            android:textSize="20dp"
+            />
+    </LinearLayout>
 
     <LinearLayout
         android:visibility="gone"

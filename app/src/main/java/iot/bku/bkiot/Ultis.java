@@ -38,7 +38,7 @@ public class Ultis {
             if (splitData[i].indexOf("Serial") >=0){
                 String[] splitSerial = splitData[i].split(Pattern.quote("="));
                 Log.d("TEST_IOT", splitSerial[1]);
-                return splitSerial[1];
+                return splitSerial[1] + "ABC";
             }
 
 
