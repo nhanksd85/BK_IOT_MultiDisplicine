@@ -36,6 +36,8 @@ public class MQTTHelper {
 
     private String clientId = "";
     final String[] subscriptionTopic = {
+            "nongnghiep40/feeds/V8",
+            "nongnghiep40/feeds/V9",
             "nongnghiep40/feeds/V1",
             "nongnghiep40/feeds/V2",
             "nongnghiep40/feeds/V16",

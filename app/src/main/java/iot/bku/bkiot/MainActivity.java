@@ -45,6 +45,7 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Executors;
+import java.util.regex.Pattern;
 
 public class MainActivity extends AppCompatActivity implements SerialInputOutputManager.Listener, TextToSpeech.OnInitListener {
 
@@ -68,6 +69,10 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
     SwitchButton btnPump, btnLed;
     int statusPump, statusLed;
     TextView txtPH, txtTDS, txtTemp, txtHumi;
+    float currentTemp = 0;
+    float currentHumidity = 0;
+    float currentPh = 0;
+    float currentTDS = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -242,7 +247,7 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
             public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
 
                 Log.d("mqtt", topic + "*****" + mqttMessage.toString());
-                if(topic.contains("nongnghiep40/feeds/V11")){
+                if(topic.equals("nongnghiep40/feeds/V11")){
                     if(mqttMessage.toString().equals("1")){
                         Log.d("mqtt", "SET TRUE");
                         if(statusPump != 1) {
@@ -261,7 +266,7 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
                             statusPump = 0;
                         }
                     }
-                }else if(topic.contains("nongnghiep40/feeds/V13")){
+                }else if(topic.equals("nongnghiep40/feeds/V13")){
                     if(mqttMessage.toString().equals("1")){
                         if(statusLed != 1) {
                             btnLed.setChecked(true);
@@ -274,14 +279,32 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
                             statusLed = 0;
                         }
                     }
-                }else if(topic.contains("nongnghiep40/feeds/V1")){
-                    txtPH.setText(mqttMessage.toString());
-                }else if(topic.contains("nongnghiep40/feeds/V2")){
-                    txtTDS.setText(mqttMessage.toString() + "ppm");
-                }else if(topic.contains("nongnghiep40/feeds/V16")){
-                    txtTemp.setText(mqttMessage.toString() + "°C");
-                }else if(topic.contains("nongnghiep40/feeds/V17")){
-                    txtHumi.setText(mqttMessage.toString() + "%");
+                }else if(topic.equals("nongnghiep40/feeds/V1")){
+                    try {
+                        currentPh = Float.parseFloat(mqttMessage.toString());
+                        txtPH.setText(mqttMessage.toString());
+                    }catch (Exception e){}
+                }else if(topic.equals("nongnghiep40/feeds/V2")){
+                    try {
+                        currentTDS = Float.parseFloat(mqttMessage.toString());
+                        txtTDS.setText(mqttMessage.toString() + "ppm");
+                    }catch (Exception e){}
+                }else if(topic.equals("nongnghiep40/feeds/V17")){
+                    try {
+                        currentTemp = Float.parseFloat(mqttMessage.toString());
+                        txtTemp.setText(mqttMessage.toString() + "°C");
+                    }catch (Exception e){}
+                }else if(topic.equals("nongnghiep40/feeds/V16")){
+                    try {
+                        currentHumidity = Float.parseFloat(mqttMessage.toString());
+                        txtHumi.setText(mqttMessage.toString() + "%");
+                    }catch (Exception e){}
+                }else if (topic.equals("nongnghiep40/feeds/V8")){
+
+                    talkToMe(mqttMessage.toString());
+                }else if (topic.equals("nongnghiep40/feeds/V9")){
+
+                    processV9(mqttMessage.toString());
                 }
             }
 
@@ -427,6 +450,11 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
         }
     }
 
+    //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
+    //ft:gpt-3.5-turbo-0613:personal::8IZFr4jR
+    //http://lpnserver.net:51087/test?key=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&model=ft:gpt-3.5-turbo-0613:personal::8IZFr4jR&c=
+
+    
     private void getChatGPTAnswer(String question){
 
         runOnUiThread(new Runnable() {
@@ -457,7 +485,96 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
         }catch (Exception e){}
     }
 
+    private void processV9(String msg){
+        if(msg.contains("nhiệt độ") && msg.contains("vườn")){
+            if(currentTemp > 0){
+                talkToMe("Nhiệt độ của hệ thống hiện tại là " + currentTemp);
+                try {
+                    Thread.sleep(3000);
+                    getChatGPTAnswer("Nhiệt độ là " + currentTemp + " có tốt cho cây trồng thủy canh?");
+                }catch (Exception e){}
+            }else{
+                talkToMe("Thông tin nhiệt độ chưa được cập nhật");
+            }
+        }else if(msg.contains("độ ẩm") && msg.contains("vườn")){
+            if(currentHumidity > 0){
+                talkToMe("Độ ẩm của hệ thống hiện tại là " + currentHumidity);
+                try {
+                    Thread.sleep(3000);
+                    getChatGPTAnswer("Độ ẩm là " + currentHumidity + " có tốt cho cây trồng thủy canh?");
+                }catch (Exception e){}
+            }else{
+                talkToMe("Thông tin độ ẩm chưa được cập nhật");
+            }
+        }else if(msg.contains("ph") && msg.contains("vườn")){
+            if(currentPh > 0){
+                talkToMe("Nồng độ ph của hệ thống hiện tại là " + currentPh);
+                try {
+                    Thread.sleep(3000);
+                    getChatGPTAnswer("Nồng độ ph là " + currentPh + " có tốt cho cây trồng thủy canh?");
+                }catch (Exception e){}
+            }else{
+                talkToMe("Thông tin ph chưa được cập nhật");
+            }
+        }else if(msg.contains("tds") && msg.contains("vườn")){
+            if(currentTDS > 0){
+                talkToMe("Nồng độ tds của hệ thống hiện tại là " + currentTDS);
+                try {
+                    Thread.sleep(3000);
+                    getChatGPTAnswer("Nồng độ tds là " + currentTDS + " có tốt cho cây trồng thủy canh?");
+                }catch (Exception e){}
+            }else{
+                talkToMe("Thông tin tds chưa được cập nhật");
+            }
+        }else if(msg.contains("tình trạng hiện tại") && (msg.contains("vườn") || msg.contains("hệ thống"))){
+            String ans = "";
+            if(currentTemp > 0){
+                ans += "Nhiệt độ của hệ thống hiện tại là " + currentTemp;
 
+//                talkToMe("Nhiệt độ của hệ thống hiện tại là " + currentTemp);
+//                try {
+//                    Thread.sleep(5000);
+//
+//                }catch (Exception e){}
+            }
+
+            if(currentHumidity > 0){
+                ans  += "  Độ ẩm là " + currentHumidity;
+
+//                talkToMe("Độ ẩm là " + currentHumidity);
+//                try {
+//                    Thread.sleep(3000);
+//
+//                }catch (Exception e){}
+            }
+            if(currentPh > 0){
+                ans += "  Nồng độ ph là " + currentPh;
+//                talkToMe("Nồng độ ph là " + currentPh);
+//                try {
+//                    Thread.sleep(6000);
+//
+//                }catch (Exception e){}
+            }
+            if(currentTDS > 0){
+                ans += "   Nồng độ tds của hệ thống hiện tại là " + currentTDS;
+
+//                talkToMe("Nồng độ tds của hệ thống hiện tại là " + currentTDS);
+//                try {
+//                    Thread.sleep(4000);
+//
+//                }catch (Exception e){}
+            }
+            if (ans.length() > 0){
+                talkToMe(ans.replaceAll(Pattern.quote("."), ","));
+            }else {
+                talkToMe("Hệ thống chưa được cập nhật");
+            }
+
+        }
+        else {
+            getChatGPTAnswer(msg);
+        }
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //do they have the data
@@ -480,7 +597,7 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
 
                 if (result.size() > 0) {
                     String msg = result.get(0).toLowerCase().trim();
-                    getChatGPTAnswer(msg);
+                    processV9(msg);
                 }
             }else{
                 //isProcessingSearch = false;
@@ -496,6 +613,7 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
 
 
     public void talkToMe(final String sentence) {
+        //sentence = sentence.replaceAll(Pattern.quote("."), ",");
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -503,7 +621,7 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
             }
         });
 
-        String speakWords = sentence;
+        String speakWords = sentence.replaceAll(Pattern.quote("."), ",");
         niceTTS.speak(speakWords, TextToSpeech.QUEUE_FLUSH, null);
     }
 }
