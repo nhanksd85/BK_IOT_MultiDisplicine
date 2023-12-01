@@ -21,7 +21,7 @@
         android:roundIcon="@drawable/logoapp"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity  android:screenOrientation="landscape" android:name=".MainActivity">
+        <activity  android:screenOrientation="sensorPortrait" android:name=".SmartPower">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -39,7 +39,7 @@
 
         <service android:name="org.eclipse.paho.android.service.MqttService" />
 
-        <activity android:name=".SmartPower">
+        <activity android:name=".MainActivity">
 
         </activity>
     </application>

@@ -80,9 +80,6 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
 
 
 
-
-
-
         //create an Intent
         Intent checkData = new Intent();
         //set it up to check for tts data
