@@ -42,6 +42,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Executors;
@@ -230,7 +231,7 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
     }
 
     private void startMQTT() {
-        mqttHelper = new MQTTHelper(getApplicationContext(), Ultis.hashCode(Ultis.getCPUSerial()));
+        mqttHelper = new MQTTHelper(getApplicationContext(), getRandomString(10));
         mqttHelper.setCallback(new MqttCallbackExtended() {
             @Override
             public void connectComplete(boolean b, String s) {
@@ -623,5 +624,18 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
 
         String speakWords = sentence.replaceAll(Pattern.quote("."), ",");
         niceTTS.speak(speakWords, TextToSpeech.QUEUE_FLUSH, null);
+    }
+
+    private static final String ALLOWED_CHARACTERS ="0123456789qwertyuiopasdfghjklzxcvbnm";
+
+    private static String getRandomString(final int sizeOfRandomString)
+    {
+        final Random random=new Random();
+        final StringBuilder sb=new StringBuilder(sizeOfRandomString);
+        sb.append('L');
+        sb.append('T');
+        for(int i=0;i<sizeOfRandomString;++i)
+            sb.append(ALLOWED_CHARACTERS.charAt(random.nextInt(ALLOWED_CHARACTERS.length())));
+        return sb.toString();
     }
 }
