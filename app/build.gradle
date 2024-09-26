@@ -3,9 +3,9 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "iot.bku.bkiot.chatgpt"
+        applicationId "iot.bku.bkiot.chatgpt.vinhlong"
         minSdkVersion 26
-        targetSdkVersion 30
+        targetSdkVersion 21
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"

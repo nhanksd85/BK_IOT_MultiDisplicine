@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://D:\DCAR_SOFTWARE\AndroidBLE\MobileUART\BK_MultiDisplicine_Git.iml" filepath="D:\DCAR_SOFTWARE\AndroidBLE\MobileUART\BK_MultiDisplicine_Git.iml" />
-      <module fileurl="file://$PROJECT_DIR$/MobileUART.iml" filepath="$PROJECT_DIR$/MobileUART.iml" />
+      <module fileurl="file://$PROJECT_DIR$/GPTDemo.iml" filepath="$PROJECT_DIR$/GPTDemo.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

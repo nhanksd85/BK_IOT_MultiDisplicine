@@ -39,6 +39,7 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +48,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Executors;
 
-public class MainActivity extends AppCompatActivity implements SerialInputOutputManager.Listener, TextToSpeech.OnInitListener {
+public class MainActivity extends AppCompatActivity implements TextToSpeech.OnInitListener {
 
 
     OkHttpClient client = new OkHttpClient();
@@ -303,55 +304,55 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
         });
     }
 
-    private void openUART() {
-        UsbManager manager = (UsbManager) getSystemService(Context.USB_SERVICE);
-        List<UsbSerialDriver> availableDrivers = UsbSerialProber.getDefaultProber().findAllDrivers(manager);
-
-        if (availableDrivers.isEmpty()) {
-            Log.d("UART", "UART is not available");
-            //txtLocation.setText("UART is note available");
-
-        } else {
-            Log.d("UART", "UART is available");
-            //txtLocation.setText("UART is available");
-
-            UsbSerialDriver driver = availableDrivers.get(0);
-            UsbDeviceConnection connection = manager.openDevice(driver.getDevice());
-            if (connection == null) {
-
-                PendingIntent usbPermissionIntent = PendingIntent.getBroadcast(this, 0, new Intent(INTENT_ACTION_GRANT_USB), 0);
-                manager.requestPermission(driver.getDevice(), usbPermissionIntent);
-
-                manager.requestPermission(driver.getDevice(), PendingIntent.getBroadcast(this, 0, new Intent(ACTION_USB_PERMISSION), 0));
-
-
-                return;
-            } else {
-
-                port = driver.getPorts().get(0);
-                try {
-                    port.open(connection);
-                    //port.setParameters(115200, 8, UsbSerialPort.STOPBITS_1, UsbSerialPort.PARITY_NONE);
-                    port.setParameters(115200, 8, UsbSerialPort.STOPBITS_1, UsbSerialPort.PARITY_NONE);
-
-                    //port.write("ABC#".getBytes(), 1000);
-
-                    SerialInputOutputManager usbIoManager = new SerialInputOutputManager(port, this);
-                    Executors.newSingleThreadExecutor().submit(usbIoManager);
-
-
-
-                    Log.d("UART", "UART is openned");
-                    //txtLocation.setText("UART is openned");
-
-                } catch (Exception e) {
-                    Log.d("UART", "There is error");
-                    //txtLocation.setText("There is error");
-                }
-            }
-        }
-
-    }
+//    private void openUART() {
+//        UsbManager manager = (UsbManager) getSystemService(Context.USB_SERVICE);
+//        List<UsbSerialDriver> availableDrivers = UsbSerialProber.getDefaultProber().findAllDrivers(manager);
+//
+//        if (availableDrivers.isEmpty()) {
+//            Log.d("UART", "UART is not available");
+//            //txtLocation.setText("UART is note available");
+//
+//        } else {
+//            Log.d("UART", "UART is available");
+//            //txtLocation.setText("UART is available");
+//
+//            UsbSerialDriver driver = availableDrivers.get(0);
+//            UsbDeviceConnection connection = manager.openDevice(driver.getDevice());
+//            if (connection == null) {
+//
+//                PendingIntent usbPermissionIntent = PendingIntent.getBroadcast(this, 0, new Intent(INTENT_ACTION_GRANT_USB), 0);
+//                manager.requestPermission(driver.getDevice(), usbPermissionIntent);
+//
+//                manager.requestPermission(driver.getDevice(), PendingIntent.getBroadcast(this, 0, new Intent(ACTION_USB_PERMISSION), 0));
+//
+//
+//                return;
+//            } else {
+//
+//                port = driver.getPorts().get(0);
+//                try {
+//                    port.open(connection);
+//                    //port.setParameters(115200, 8, UsbSerialPort.STOPBITS_1, UsbSerialPort.PARITY_NONE);
+//                    port.setParameters(115200, 8, UsbSerialPort.STOPBITS_1, UsbSerialPort.PARITY_NONE);
+//
+//                    //port.write("ABC#".getBytes(), 1000);
+//
+//                    SerialInputOutputManager usbIoManager = new SerialInputOutputManager(port, this);
+//                    Executors.newSingleThreadExecutor().submit(usbIoManager);
+//
+//
+//
+//                    Log.d("UART", "UART is openned");
+//                    //txtLocation.setText("UART is openned");
+//
+//                } catch (Exception e) {
+//                    Log.d("UART", "There is error");
+//                    //txtLocation.setText("There is error");
+//                }
+//            }
+//        }
+//
+//    }
 
     String buffer = "";
     String ai_voice = "";
@@ -383,24 +384,24 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
 //        }
     }
 
-    @Override
-    public void onNewData(byte[] data) {
-        buffer += new String(data);
-        Log.d("UART", "Received: " + new String(data));
+//    @Override
+//    public void onNewData(byte[] data) {
+//        buffer += new String(data);
+//        Log.d("UART", "Received: " + new String(data));
+//
+//        if (buffer.contains("!") && buffer.contains("#")) {
+//            processData(buffer);
+//            //txtLocation.setText("MA:" + buffer);
+//            buffer = "";
+//        }else{
+//            //txtLocation.setText("NA:" + buffer);
+//        }
+//    }
 
-        if (buffer.contains("!") && buffer.contains("#")) {
-            processData(buffer);
-            //txtLocation.setText("MA:" + buffer);
-            buffer = "";
-        }else{
-            //txtLocation.setText("NA:" + buffer);
-        }
-    }
-
-    @Override
-    public void onRunError(Exception e) {
-
-    }
+//    @Override
+//    public void onRunError(Exception e) {
+//
+//    }
 
     public void saveSettingData(){
         for(int i = 0; i< 10; i++){
@@ -448,7 +449,7 @@ public class MainActivity extends AppCompatActivity implements SerialInputOutput
             }
         });
         final Request request = new Request.Builder()
-                .url("http://lpnserver.net:51087/test?c=" + question)
+                .url("http://lpnserver.net:51087/test2?c=" + question)
                 .build();
         try {
             //Response response = client.newCall(request).execute();
